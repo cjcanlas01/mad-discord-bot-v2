@@ -1,0 +1,17 @@
+{
+  "name": "mad-discord-bot",
+  "version": "1.0.0",
+  "description": "A discord bot of multiple uses.",
+  "main": "app.js",
+  "scripts": {
+    "dev": "nodemon app.js"
+  },
+  "author": "CJ Canlas",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^12.2.0",
+    "dotenv": "^8.2.0",
+    "google-spreadsheet": "^3.0.11",
+    "nodemon": "^2.0.3"
+  }
+}
