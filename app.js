@@ -1,6 +1,6 @@
 const fs = require('fs');
 const Discord = require('discord.js');
-const { prefix, token } = require('./config.json');
+const { PREFIX1, TOKEN } = require('./config.json');
 const client = new Discord.Client();
 
 client.commands = new Discord.Collection();
@@ -16,9 +16,9 @@ for (const file of commandFiles) {
 }
 
 client.on('message', message => {
-	if (!message.content.startsWith(prefix) || message.author.bot) return;
+	if (!message.content.startsWith(PREFIX1) || message.author.bot) return;
 	
-	const args = message.content.slice(prefix.length);
+	const args = message.content.slice(PREFIX1.length);
 	const command = args.trim().split(" ")[0];
 
 	if (!client.commands.has(command)) return;
@@ -31,4 +31,4 @@ client.on('message', message => {
 	}
 });
 
-client.login(token);
+client.login(TOKEN);

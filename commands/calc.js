@@ -1,3 +1,6 @@
+/**
+ * Computes bank requirements and returns if request is available or not
+ */
 const embed = require('../common/discordEmbed');
 const getArgs = require('../common/getArgs');
 const account = require('../modules/accounting.min');
@@ -6,12 +9,12 @@ module.exports = {
 	name: 'calc',
 	description: 'Compute for bank requirement.',
 	execute(message, args) {
-		const [ shipped, delivered, requested ] = getArgs('calc', args);
+		const [ shipped, delivered, requested ] = getArgs(this.name, args);
 		const percentMultiplicator = 5;
 		
-		let totalBalance = Number(shipped) * percentMultiplicator;
-    	let availableBalance = totalBalance - Number(delivered);
-		let requestResult = (requested <= availableBalance) ? ':thumbsup:' : ':thumbsdown:';
+		const totalBalance = Number(shipped) * percentMultiplicator;
+    	const availableBalance = totalBalance - Number(delivered);
+		const requestResult = (requested <= availableBalance) ? ':thumbsup:' : ':thumbsdown:';
 		let output;
 
 		if(shipped && delivered && requested) {
@@ -29,5 +32,5 @@ module.exports = {
 		message.channel.send(embed(
 			output	
         ));
-	},
+	}
 };
