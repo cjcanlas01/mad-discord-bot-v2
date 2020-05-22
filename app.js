@@ -1,7 +1,8 @@
 const fs = require('fs');
 const Discord = require('discord.js');
-const { PREFIX1, TOKEN } = require('./config.json');
+const { PREFIX1, PREFIX2, TOKEN } = require('./config.json');
 const client = new Discord.Client();
+const { commandHandler } = require('./common/trackingSystem');
 
 client.commands = new Discord.Collection();
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
@@ -16,6 +17,9 @@ for (const file of commandFiles) {
 }
 
 client.on('message', message => {
+	
+	commandHandler(client, message, PREFIX2);
+
 	if (!message.content.startsWith(PREFIX1) || message.author.bot) return;
 	
 	const args = message.content.slice(PREFIX1.length);
