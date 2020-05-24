@@ -40,11 +40,49 @@ const commandHandler = (client, message, prefix) => {
 const prepTrackData = (message, event) => {
     const guildData = message.guild.member(message.author);
     const date = new Date(message.createdAt);
-    const length = String(guildData.nickname).split(/\[(.*?)\]/).length;
-
     const nickname = guildData.nickname != null ? guildData.nickname  : message.author.username;
-    const alliance = length > 1 ? String(guildData.nickname).split(/\[(.*?)\]/)[1] : null;
-    const name = length <= 1 ? nickname : String(nickname).split(/\[(.*?)\]/)[2];
+
+    /**
+     * Get alliance tag of player name on discord server
+     * @param nickname | Discord Nickname
+     */
+    const getAllianceTag = (nickname) => {
+        const tag = nickname.slice(0, 5);
+        const tagWithoutBrackets = tag.substr(1, tag.length-2);
+        return tagWithoutBrackets;
+    }
+
+    /**
+     * Get player name of user on discord server
+     * @param nickname | Discord Nickname
+     */
+    const getPlayerName = (nickname) => {
+        nickname = Array.from(nickname);
+        let lastTag;
+        for(let i = nickname.length; i >=0; i--) {
+            if(nickname[i] == "]") {
+                lastTag = i;
+            }
+        }
+
+        const playerName = nickname.slice((lastTag + 1), nickname.length);
+        const sanitizedPlayerName = (() => {
+            // Remove space on first index if found, due to alliance tag removed
+            if(playerName[0] == " ") {
+                playerName.shift();
+            }
+
+            // For players that has two names
+            const slashIndex = Array.from(playerName).findIndex(val => val == '/');
+            if(slashIndex != -1) {
+                return playerName.slice(0, slashIndex - 1).join('');
+            }
+
+            return playerName.join('');
+
+        })();
+        return sanitizedPlayerName;
+    }
 
     const dateFormat = date.getUTCFullYear()  + "-" + (date.getUTCMonth() + 1) + "-" + date.getUTCDate();
     const timeFormat = (function() {
@@ -59,8 +97,8 @@ const prepTrackData = (message, event) => {
     })();
 
     return {
-        ALLIANCE: alliance,
-        NAME: name,
+        ALLIANCE: getAllianceTag(nickname),
+        NAME: getPlayerName(nickname),
         ACTION: event,
         DATE: dateFormat,
         TIME: timeFormat  
