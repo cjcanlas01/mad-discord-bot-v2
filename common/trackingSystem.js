@@ -1,7 +1,8 @@
 const { SPREADSHEET_ID, GOOGLE_SERVICE_ACCOUNT_EMAIL, GOOGLE_PRIVATE_KEY } = require('../config.json');
 const { GoogleSpreadsheet } = require('google-spreadsheet');
 const doc = new GoogleSpreadsheet(SPREADSHEET_ID);
-
+const session = require('sessionstorage');
+const CURRENT_PO = 'CURRENT_PO';
 /**
  * Function to read commands only available with prefix "!"
  * 
@@ -31,57 +32,65 @@ const commandHandler = (client, message, prefix) => {
 }
 
 /**
+ * Get alliance tag of player name on discord server
+ * @param nickname | Discord Nickname
+ */
+const getAllianceTag = (nickname) => {
+    const tag = nickname.slice(0, 5);
+    const tagWithoutBrackets = tag.substr(1, tag.length-2);
+    return tagWithoutBrackets;
+}
+
+/**
+ * Get player name of user on discord server
+ * @param nickname | Discord Nickname
+ */
+const getPlayerName = (nickname) => {
+    nickname = Array.from(nickname);
+    let lastTag;
+    for(let i = nickname.length; i >=0; i--) {
+        if(nickname[i] == "]") {
+            lastTag = i;
+        }
+    }
+
+    const playerName = nickname.slice((lastTag + 1), nickname.length);
+    const sanitizedPlayerName = (() => {
+        // Remove space on first index if found, due to alliance tag removed
+        if(playerName[0] == " ") {
+            playerName.shift();
+        }
+
+        // For players that has two names
+        const slashIndex = Array.from(playerName).findIndex(val => val == '/');
+        if(slashIndex != -1) {
+            return playerName.slice(0, slashIndex - 1).join('');
+        }
+
+        return playerName.join('');
+
+    })();
+    return sanitizedPlayerName;
+}
+
+/**
  * Function to prepare tracking data to add to sheet row using google sheets api
  * 
  * @param message | discord object
  * @param event | string
  * @return object
  */
-const prepTrackData = (message, event) => {
+const prepTrackData = (message, event, commit = false) => {
     const guildData = message.guild.member(message.author);
     const date = new Date(message.createdAt);
     const nickname = guildData.nickname != null ? guildData.nickname  : message.author.username;
 
-    /**
-     * Get alliance tag of player name on discord server
-     * @param nickname | Discord Nickname
-     */
-    const getAllianceTag = (nickname) => {
-        const tag = nickname.slice(0, 5);
-        const tagWithoutBrackets = tag.substr(1, tag.length-2);
-        return tagWithoutBrackets;
-    }
-
-    /**
-     * Get player name of user on discord server
-     * @param nickname | Discord Nickname
-     */
-    const getPlayerName = (nickname) => {
-        nickname = Array.from(nickname);
-        let lastTag;
-        for(let i = nickname.length; i >=0; i--) {
-            if(nickname[i] == "]") {
-                lastTag = i;
-            }
-        }
-
-        const playerName = nickname.slice((lastTag + 1), nickname.length);
-        const sanitizedPlayerName = (() => {
-            // Remove space on first index if found, due to alliance tag removed
-            if(playerName[0] == " ") {
-                playerName.shift();
-            }
-
-            // For players that has two names
-            const slashIndex = Array.from(playerName).findIndex(val => val == '/');
-            if(slashIndex != -1) {
-                return playerName.slice(0, slashIndex - 1).join('');
-            }
-
-            return playerName.join('');
-
-        })();
-        return sanitizedPlayerName;
+    // Check if a PO is in session
+    if(checkTrackSession() && commit == false) {
+        return {
+            PO: session.getItem(CURRENT_PO),
+            STATUS: false
+        };
     }
 
     const dateFormat = date.getUTCFullYear()  + "-" + (date.getUTCMonth() + 1) + "-" + date.getUTCDate();
@@ -95,6 +104,13 @@ const prepTrackData = (message, event) => {
 
         return UTCHour + ":" + UTCMin;
     })();
+
+    // For starting po, set PO for current session
+    if(event == 'START') {
+        setTrackSession(getPlayerName(nickname));
+    } else {
+        session.clear();
+    }
 
     return {
         ALLIANCE: getAllianceTag(nickname),
@@ -125,25 +141,28 @@ const addRowData = (rowData) => {
 }
 
 /**
- * TODO: 
- * 
  * Function to set tracking current protocol officer session
  */
-const setTrackSession = () => {
-
+const setTrackSession = (nickname) => {
+    if(!checkTrackSession()) {
+        session.setItem(CURRENT_PO, nickname);
+    }
 }
 
 /**
- * TODO:
- * 
  * Function to check current protocol officer session
  */
 const checkTrackSession = () => {
-    
+    if(session.getItem(CURRENT_PO)) {
+        return true;
+    }
+
+    return false;
 }
 
 module.exports = {
     commandHandler,
     prepTrackData,
-    addRowData
+    addRowData,
+    getPlayerName
 };
