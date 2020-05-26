@@ -1,4 +1,9 @@
-const { addRowData, prepTrackData, checkTrackSession, getTrackSession, getRoleObj } = require('../common/trackingSystem');
+const { 
+	addRowData, 
+	prepTrackData, 
+	checkTrackSession, 
+	getTrackSession, 
+	addOrRemoveRole } = require('../common/trackingSystem');
 const session = require('sessionstorage');
 
 module.exports = {
@@ -28,11 +33,7 @@ module.exports = {
 			const dataForStop = prepTrackData(message, 'STOP', true);
 			if(dataForStop) {
 				addRowData(dataForStop);
-				message.guild.members
-					.fetch(currentPO_ID)
-					.then((memberData) => 
-						memberData.roles.remove(getRoleObj('Protocol Officer', message))
-					);
+				addOrRemoveRole(currentPO_ID, false, message);
 			}
 			
 			message.guild.member(message.author).nickname = COMMAND_EXECUTOR;
@@ -40,11 +41,7 @@ module.exports = {
 			if(dataForStart) {
 				setTimeout(function() {
 					addRowData(dataForStart);
-					message.guild.members
-						.fetch(message.author.id)
-						.then((memberData) => 
-							memberData.roles.add(getRoleObj('Protocol Officer', message))
-						);
+					addOrRemoveRole(message.author.id, true, message);
 				}, 1000);
 			}
 

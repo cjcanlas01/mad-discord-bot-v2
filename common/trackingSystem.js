@@ -162,10 +162,18 @@ const checkTrackSession = () => {
     return false;
 }
 
+/**
+ * Function to get current track session
+ */
 const getTrackSession = () => {
     return session.getItem(CURRENT_PO);
 }
 
+/**
+ * Function to get role object
+ * @param roleString | string
+ * @param message | Discord Message Object
+ */
 const getRoleObj = (roleString, message) => {
     // Find discord role object
     let role = message.guild.roles.cache.find((data) => {
@@ -174,6 +182,25 @@ const getRoleObj = (roleString, message) => {
     return role;
 };
 
+/**
+ * Function to add or remove role of Protocol officer
+ * @param id | Discord ID of user
+ * @param condition | boolean
+ * @param message | Discord Message Object
+ */
+const addOrRemoveRole = (id, condition, message) => {
+	message.guild.members
+	.fetch(id)
+	.then((memberData) => {
+		const role = getRoleObj('Protocol Officer', message);
+		if(condition) {
+			memberData.roles.add(role);
+		} else {
+			memberData.roles.remove(role);
+		}	
+	});
+}
+
 module.exports = {
     commandHandler,
     prepTrackData,
@@ -181,5 +208,6 @@ module.exports = {
     getPlayerName,
     getTrackSession,
     checkTrackSession,
-    getRoleObj
+    getRoleObj,
+    addOrRemoveRole
 };
