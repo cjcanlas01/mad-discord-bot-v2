@@ -18,7 +18,8 @@ const commandHandler = (client, message, prefix) => {
     // List of available commands to prefix "!"
     const acceptableCommands = [
         'start-po',
-        'stop-po'
+        'stop-po',
+        'replace-po'
     ];
     
     if (!client.commands.has(command) || !acceptableCommands.includes(command)) return;
@@ -107,7 +108,7 @@ const prepTrackData = (message, event, commit = false) => {
 
     // For starting po, set PO for current session
     if(event == 'START') {
-        setTrackSession(getPlayerName(nickname));
+        setTrackSession(nickname);
     } else {
         session.clear();
     }
@@ -160,9 +161,15 @@ const checkTrackSession = () => {
     return false;
 }
 
+const getTrackSession = () => {
+    return session.getItem(CURRENT_PO);
+}
+
 module.exports = {
     commandHandler,
     prepTrackData,
     addRowData,
-    getPlayerName
+    getPlayerName,
+    getTrackSession,
+    checkTrackSession
 };

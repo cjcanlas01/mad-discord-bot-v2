@@ -1,4 +1,4 @@
-const { addRowData, prepTrackData, getPlayerName } = require('../common/trackingSystem');
+const { addRowData, prepTrackData } = require('../common/trackingSystem');
 
 module.exports = {
 	name: 'stop-po',
@@ -13,10 +13,12 @@ module.exports = {
 
 		const data = prepTrackData(message, 'STOP');
 		if(Object.keys(data).length <= 2) {
-			if(data.PO == getPlayerName(message.guild.member(message.author).nickname)) {
+
+			if(data.PO == message.guild.member(message.author).nickname) {
 				addRowData(
 					prepTrackData(message, 'STOP', true)
-				)
+				);
+
 				message.channel.send('The Protocole officer is leaving, the buffs will not be available until another one take the role. Thank you !');
 				message.channel.send('https://static.wixstatic.com/media/3bd738_28c4b141811146a9b8d86c05d224b079~mv2.jpg/v1/fill/w_569,h_427,al_c,q_80/madclosed_copy.webp');
 			} else {
