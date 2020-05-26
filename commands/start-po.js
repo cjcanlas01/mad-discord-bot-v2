@@ -1,4 +1,4 @@
-const { addRowData, prepTrackData } = require('../common/trackingSystem');
+const { addRowData, prepTrackData, getRoleObj } = require('../common/trackingSystem');
 
 module.exports = {
 	name: 'start-po',
@@ -13,7 +13,15 @@ module.exports = {
 
 		const data = prepTrackData(message, 'START');
 		if(Object.keys(data).length > 2) {
-			addRowData(data);
+			if(data) {
+				addRowData(data);
+				const discordId = message.author.id;
+				message.guild.members
+					.fetch(discordId)
+					.then((memberData) => 
+						memberData.roles.add(getRoleObj('Protocol Officer', message))
+					);
+			}
 			message.channel.send('NOW! A new protocole officer is here to give buffs. Thank you for your time generous PO !');
 			message.channel.send('https://static.wixstatic.com/media/3bd738_680cb14b338044b69d4ebfa7f451010e~mv2.jpg/v1/fill/w_569,h_427,al_c,q_80/madopen_copy.webp');
 		} else {

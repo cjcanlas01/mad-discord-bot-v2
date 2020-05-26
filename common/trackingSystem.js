@@ -108,7 +108,7 @@ const prepTrackData = (message, event, commit = false) => {
 
     // For starting po, set PO for current session
     if(event == 'START') {
-        setTrackSession(nickname);
+        setTrackSession(nickname, message.author.id);
     } else {
         session.clear();
     }
@@ -144,9 +144,10 @@ const addRowData = (rowData) => {
 /**
  * Function to set tracking current protocol officer session
  */
-const setTrackSession = (nickname) => {
+const setTrackSession = (nickname, id) => {
     if(!checkTrackSession()) {
         session.setItem(CURRENT_PO, nickname);
+        session.setItem('CURRENT_PO_ID', id);
     }
 }
 
@@ -165,11 +166,20 @@ const getTrackSession = () => {
     return session.getItem(CURRENT_PO);
 }
 
+const getRoleObj = (roleString, message) => {
+    // Find discord role object
+    let role = message.guild.roles.cache.find((data) => {
+        return data.name == roleString;
+    });
+    return role;
+};
+
 module.exports = {
     commandHandler,
     prepTrackData,
     addRowData,
     getPlayerName,
     getTrackSession,
-    checkTrackSession
+    checkTrackSession,
+    getRoleObj
 };

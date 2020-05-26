@@ -1,4 +1,5 @@
-const { addRowData, prepTrackData, checkTrackSession, getTrackSession } = require('../common/trackingSystem');
+const { addRowData, prepTrackData, checkTrackSession, getTrackSession, getRoleObj } = require('../common/trackingSystem');
+const session = require('sessionstorage');
 
 module.exports = {
 	name: 'replace-po',
@@ -23,9 +24,15 @@ module.exports = {
 		if(COMMAND_EXECUTOR != currentPO) {
 
 			message.guild.member(message.author).nickname = currentPO;
+			const currentPO_ID = session.getItem('CURRENT_PO_ID');
 			const dataForStop = prepTrackData(message, 'STOP', true);
 			if(dataForStop) {
 				addRowData(dataForStop);
+				message.guild.members
+					.fetch(currentPO_ID)
+					.then((memberData) => 
+						memberData.roles.remove(getRoleObj('Protocol Officer', message))
+					);
 			}
 			
 			message.guild.member(message.author).nickname = COMMAND_EXECUTOR;
@@ -33,6 +40,11 @@ module.exports = {
 			if(dataForStart) {
 				setTimeout(function() {
 					addRowData(dataForStart);
+					message.guild.members
+						.fetch(message.author.id)
+						.then((memberData) => 
+							memberData.roles.add(getRoleObj('Protocol Officer', message))
+						);
 				}, 1000);
 			}
 
