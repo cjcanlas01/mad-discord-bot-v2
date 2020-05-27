@@ -8,6 +8,7 @@ const account = require('../modules/accounting.min');
 module.exports = {
 	name: 'calc',
 	description: 'Compute for bank requirement.',
+	syntax: '$mad calc <shipped> <delivered> <requested>',
 	execute(message, args) {
 		const [ shipped, delivered, requested ] = getArgs(this.name, args);
 		const percentMultiplicator = 5;

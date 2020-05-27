@@ -2,7 +2,8 @@ const { addRowData, prepTrackData, addOrRemoveRole } = require('../common/tracki
 
 module.exports = {
 	name: 'start-po',
-	description: 'Tracker mechanism when command "start-po" is called.',
+	description: 'Start your PO session.',
+	syntax: '!start-po',
 	execute(message) {
 		
 		// Check if user has proper role for access
