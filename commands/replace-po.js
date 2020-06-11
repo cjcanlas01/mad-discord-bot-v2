@@ -10,6 +10,7 @@ module.exports = {
 	name: 'replace-po',
 	description: 'Replace current Protocol officer in case he/ she becomes afk.',
 	syntax: '!replace-po',
+	includes: true,
 	execute(message) {
 		
 		// Check if user has proper role for access

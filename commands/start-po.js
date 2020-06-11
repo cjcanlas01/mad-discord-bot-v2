@@ -4,6 +4,7 @@ module.exports = {
 	name: 'start-po',
 	description: 'Start your PO session.',
 	syntax: '!start-po',
+	includes: true,
 	execute(message) {
 		
 		// Check if user has proper role for access

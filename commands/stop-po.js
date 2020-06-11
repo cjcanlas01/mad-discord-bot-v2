@@ -4,6 +4,7 @@ module.exports = {
 	name: 'stop-po',
 	description: 'Stop your PO session.',
 	syntax: '!stop-po',
+	includes: true,
 	execute(message) {
 
 		// Check if user has proper role for access

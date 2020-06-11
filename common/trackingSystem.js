@@ -1,6 +1,7 @@
-const { SPREADSHEET_ID, GOOGLE_SERVICE_ACCOUNT_EMAIL, GOOGLE_PRIVATE_KEY } = require('../config.json');
+const getConfig = require('../common/getConfig');
+const config = getConfig();
 const { GoogleSpreadsheet } = require('google-spreadsheet');
-const doc = new GoogleSpreadsheet(SPREADSHEET_ID);
+const doc = new GoogleSpreadsheet(config.SPREADSHEET_ID);
 const session = require('sessionstorage');
 const CURRENT_PO = 'CURRENT_PO';
 /**
@@ -13,19 +14,30 @@ const CURRENT_PO = 'CURRENT_PO';
  */
 const commandHandler = (client, message, prefix) => {
 
+    if (!message.content.startsWith(prefix) || message.author.bot) {
+        return false;
+    };
+
     const args = message.content.slice(prefix.length).split(/ +/);
     const command = args.shift().toLowerCase();
     // List of available commands to prefix "!"
     const acceptableCommands = [
         'start-po',
         'stop-po',
-        'replace-po'
+        'replace-po',
     ];
+    
+    const sillyCommands = require('../common/getSillyMessages')();
+    if(!client.commands.has(command) && !acceptableCommands.includes(command) && sillyCommands.has(command)) {
+        message.channel.send(sillyCommands.get(command));
+        return;
+    }
     
     if (!client.commands.has(command) || !acceptableCommands.includes(command)) return;
 
     try {
         client.commands.get(command).execute(message, args);
+        return true;
     } catch (error) {
         console.error(error);
         message.reply('there was an error trying to execute that command!');
@@ -132,8 +144,8 @@ const addRowData = (rowData) => {
     (async function(){
         // await doc.useServiceAccountAuth(require('./client_secret.json'));
         await doc.useServiceAccountAuth({
-            client_email: GOOGLE_SERVICE_ACCOUNT_EMAIL,
-            private_key: GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+            client_email: config.GOOGLE_SERVICE_ACCOUNT_EMAIL,
+            private_key: config.GOOGLE_PRIVATE_KEY,
         });
         await doc.loadInfo();
         const sheet = doc.sheetsByIndex[0]; // or use doc.sheetsById[id]

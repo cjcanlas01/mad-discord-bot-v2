@@ -7,10 +7,15 @@ module.exports = {
 	name: 'help',
 	description: 'Show available commands of MAD bot.',
 	syntax: '$mad help',
+	includes: true,
 	execute(message) {
 
 		const { commands } = message.client;
-		const json = commands.map(val => {
+		const json = commands.filter(val => {
+			if(val['includes']) {
+				return val;
+			}
+		}).map(val => {
 			return {
 				name: val.syntax,
 				value: val.description
