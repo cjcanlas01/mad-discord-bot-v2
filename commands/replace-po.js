@@ -1,10 +1,5 @@
-const { 
-	addRowData, 
-	prepTrackData, 
-	checkTrackSession, 
-	getTrackSession, 
-	addOrRemoveRole } = require('../common/trackingSystem');
-const session = require('sessionstorage');
+const { addRowData, prepTrackData, getCurrentPO, addOrRemoveRole } = require('../common/trackingSystem');
+
 
 module.exports = {
 	name: 'replace-po',
@@ -18,38 +13,44 @@ module.exports = {
 			message.channel.send(`${message.author.toString()}, you do not have access for Protocol Officer!`);
 			return false;
 		}
-		
-		// Check if there is no PO in session
-		if(!checkTrackSession()) {
-			message.channel.send('There is no Protocol officer in session!');
-			return false;
-		}
-		
-		const COMMAND_EXECUTOR = message.guild.member(message.author).nickname;
-		const currentPO = getTrackSession();
 
-		if(COMMAND_EXECUTOR != currentPO) {
+		const po = getCurrentPO(message);
+		const author = message.guild.member(message.author).nickname;
 
-			message.guild.member(message.author).nickname = currentPO;
-			const currentPO_ID = session.getItem('CURRENT_PO_ID');
-			const dataForStop = prepTrackData(message, 'STOP', true);
-			if(dataForStop) {
-				addRowData(dataForStop);
-				addOrRemoveRole(currentPO_ID, false, message);
-			}
+		if(po) {
+			const poNickname = po[0].nickname;
+			const poID = po[0].id;
+
+			if(poNickname == author) {
+				message.channel.send('You shall not pass! Use !stop-po instead.');
+				return;
+			} 
 			
-			message.guild.member(message.author).nickname = COMMAND_EXECUTOR;
-			const dataForStart =  prepTrackData(message, 'START');
-			if(dataForStart) {
-				setTimeout(function() {
-					addRowData(dataForStart);
-					addOrRemoveRole(message.author.id, true, message);
-				}, 1000);
+			if(poNickname != author) {
+				message.guild.member(message.author).nickname = poNickname;
+				const dataForStop = prepTrackData(message, 'STOP');
+				if(dataForStop) {
+					addRowData(dataForStop);
+					addOrRemoveRole(poID, false, message);
+				}
+
+				message.guild.member(message.author).nickname = author;
+				const dataForStart =  prepTrackData(message, 'START');
+				if(dataForStart) {
+					setTimeout(function() {
+						addRowData(dataForStart);
+						addOrRemoveRole(message.author.id, true, message);
+					}, 1000);
+				}
+
+				message.channel.send(`@here \n NOW! The Protocol officer has been replaced. New Protocol officer is ${message.author.toString()}.`);
+				return;
 			}
 
-			message.channel.send(`@here \n NOW! The Protocol officer has been replaced. New Protocol officer is ${message.author.toString()}.`);
+			message.channel.send('There is a Protocol officer in session!');
+			return;
 		} else {
-			message.channel.send('You shall not pass! Use !stop-po instead.');
+			message.channel.send('There is no Protocol officer currently active!');
 		}
 	}
 };
