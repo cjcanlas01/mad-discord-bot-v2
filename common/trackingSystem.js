@@ -2,8 +2,6 @@ const getConfig = require('../common/getConfig');
 const config = getConfig();
 const { GoogleSpreadsheet } = require('google-spreadsheet');
 const doc = new GoogleSpreadsheet(config.SPREADSHEET_ID);
-const session = require('sessionstorage');
-const CURRENT_PO = 'CURRENT_PO';
 /**
  * Function to read commands only available with prefix "!"
  * 
@@ -93,18 +91,10 @@ const getPlayerName = (nickname) => {
  * @param event | string
  * @return object
  */
-const prepTrackData = (message, event, commit = false) => {
+const prepTrackData = (message, event) => {
     const guildData = message.guild.member(message.author);
     const date = new Date(message.createdAt);
     const nickname = guildData.nickname != null ? guildData.nickname  : message.author.username;
-
-    // Check if a PO is in session
-    if(checkTrackSession() && commit == false) {
-        return {
-            PO: session.getItem(CURRENT_PO),
-            STATUS: false
-        };
-    }
 
     const dateFormat = date.getUTCFullYear()  + "-" + (date.getUTCMonth() + 1) + "-" + date.getUTCDate();
     const timeFormat = (function() {
@@ -117,13 +107,6 @@ const prepTrackData = (message, event, commit = false) => {
 
         return UTCHour + ":" + UTCMin;
     })();
-
-    // For starting po, set PO for current session
-    if(event == 'START') {
-        setTrackSession(nickname, message.author.id);
-    } else {
-        session.clear();
-    }
 
     return {
         ALLIANCE: getAllianceTag(nickname),
@@ -151,34 +134,6 @@ const addRowData = (rowData) => {
         const sheet = doc.sheetsByIndex[0]; // or use doc.sheetsById[id]
         await sheet.addRow(rowData);
     })(rowData);
-}
-
-/**
- * Function to set tracking current protocol officer session
- */
-const setTrackSession = (nickname, id) => {
-    if(!checkTrackSession()) {
-        session.setItem(CURRENT_PO, nickname);
-        session.setItem('CURRENT_PO_ID', id);
-    }
-}
-
-/**
- * Function to check current protocol officer session
- */
-const checkTrackSession = () => {
-    if(session.getItem(CURRENT_PO)) {
-        return true;
-    }
-
-    return false;
-}
-
-/**
- * Function to get current track session
- */
-const getTrackSession = () => {
-    return session.getItem(CURRENT_PO);
 }
 
 /**
@@ -213,13 +168,50 @@ const addOrRemoveRole = (id, condition, message) => {
 	});
 }
 
+/**
+ * Function to identify if there is current user with Protocol officer role
+ * 
+ * @param message | Discord Message Object
+ * @return false (boolean) or user data (object)
+ */
+const getCurrentPO = (message) => {
+    // Get list of all members with Protocol officer role
+    const poData = message.guild.members.cache.filter(member => {
+        return member.roles.cache.find(data => {
+            return data.name == "Protocol Officer";
+        })
+    }).map(member => {
+        return {
+            nickname: member.nickname,
+            id: member.id
+        };
+    });
+
+    // Get only the name of users
+    const isPOSingle = Object.keys(poData).map(val => {
+        return poData[val].nickname;
+    });
+
+    // Check if there are one or more users with Protocol officer
+    if(isPOSingle.length > 1) {
+        message.channel.send('There are currently more than one users with **Protocol Officer** role. Please check!');
+        return false;
+    }
+    
+    // Check if there is no Protocol officer
+    if(isPOSingle.length < 1) {
+        return false;
+    }
+
+    return poData;
+}
+
 module.exports = {
     commandHandler,
     prepTrackData,
     addRowData,
     getPlayerName,
-    getTrackSession,
-    checkTrackSession,
     getRoleObj,
-    addOrRemoveRole
+    addOrRemoveRole,
+    getCurrentPO
 };
