@@ -14,5 +14,12 @@ module.exports = () => {
         ['taunt', 'https://tenor.com/view/monty-python-gif-5626958\nhttps://tenor.com/view/taunt-stfu-go-away-monty-python-and-the-holy-grail-gif-11190306'],
         ['trap', 'https://tenor.com/view/monty-python-and-the-holy-grail-attack-bunny-gif-12275690\nhttps://tenor.com/view/run-away-monty-python-the-holy-grail-killer-bunny-gif-5605546'],
         ['witch', 'https://tenor.com/view/monty-python-holy-grail-witch-gif-6657759\nhttps://tenor.com/view/monty-python-holy-grail-witch-newt-spell-gif-4943476\nhttps://tenor.com/view/monty-python-newt-gif-14793661'],
+        // ADDED June 16, 2020
+        ['faehappy', 'https://cdn.discordapp.com/attachments/721606766265237565/722014960032546887/698b8e9d16f2696081582ab651fd024e907fd0f2_hq.gif'],
+        ['faegun', 'https://cdn.discordapp.com/attachments/721606766265237565/722015081768026122/e51.jpg'],
+        ['faemad', 'https://cdn.discordapp.com/attachments/721606766265237565/722215961519849694/tenor_9.gif'],
+        ['faehungry', 'https://cdn.discordapp.com/attachments/721606766265237565/722216077152616448/1522234124_DarlingInTheFranXXGifZeroTwo2.gif'],
+        ['faesad', 'https://cdn.discordapp.com/attachments/721606766265237565/722216091916697701/39244c83c1d1351b1db447466774e4be.gif'],
+        ['draw', 'https://tenor.com/view/monty-python-tisbutascratch-funny-gif-9050905\nhttps://tenor.com/view/monty-python-and-the-holy-grail-just-aflesh-wound-kicked-flesh-wound-wound-gif-12275696\nhttps://tenor.com/view/monty-python-im-invincible-gif-3412315\nhttps://tenor.com/view/monty-python-draw-gif-5447899'],
     ]);
 }
