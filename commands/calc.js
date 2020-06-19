@@ -15,7 +15,7 @@ module.exports = {
 		const percentMultiplicator = 5;
 		
 		const totalBalance = Number(shipped) * percentMultiplicator;
-    	const availableBalance = totalBalance - Number(delivered);
+    		const availableBalance = totalBalance - Number(delivered);
 		const requestResult = (requested <= availableBalance) ? ':thumbsup:' : ':thumbsdown:';
 		let output;
 

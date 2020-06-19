@@ -12,9 +12,79 @@ const doc = new GoogleSpreadsheet(config.SPREADSHEET_ID);
  */
 const commandHandler = (client, message, prefix) => {
 
-    if (!message.content.startsWith(prefix) || message.author.bot) {
+    if (!message.content.startsWith(prefix) && !message.content.startsWith('<') || message.author.bot) {
         return false;
     };
+
+    /**
+     * Get role details
+     * @param id 
+     * @returns obj
+     */
+    const getRoleDetails = (id) => {
+        return message.guild.roles.cache.find((data) => {
+            return data.id == id;
+        });
+    }
+
+    if (message.content.startsWith('<')) {
+
+        const parseIdTag = (tag) => {
+
+            if (!tag) {
+                return false;
+            }
+
+            const numberPattern = /\d+/g;
+            return tag.match(numberPattern).join('');
+        }
+        
+        const msgContent = message.content.split(" ");
+        let role = (function () {
+            let index = msgContent.findIndex((elem) => {
+                return !elem.startsWith("<");
+            });
+
+            if (index == -1) {
+                return parseIdTag(msgContent[msgContent.length - 1]);
+            }
+
+            return parseIdTag(msgContent[index - 1]);
+        })();
+
+        role = getRoleDetails(role);
+        let roleLowerCased;
+        if (role) {
+            roleLowerCased = role.name.toLowerCase();
+        }
+
+        // Check for command done
+        if (roleLowerCased == "done") {
+            client.commands.get(roleLowerCased).execute(message);
+            return true;
+        }
+
+        if (role && msgContent.length >= 2 && parseIdTag(msgContent[1])) {
+            // Commands using roles, has @ identifier
+            const titleCommands = [
+                'research',
+                'gather',
+                'training',
+                'building',
+                'atk',
+            ];
+
+            if (titleCommands.includes(roleLowerCased)) {
+                client.commands.get(roleLowerCased).execute(message);
+                return true;
+            } else {
+                message.channel.send('Command not found!');
+                return;
+            }
+        } else {
+            message.channel.send('Please use proper command syntax. Thank you.');
+        }
+    }
 
     const args = message.content.slice(prefix.length).split(/ +/);
     const command = args.shift().toLowerCase();
@@ -23,7 +93,18 @@ const commandHandler = (client, message, prefix) => {
         'start-po',
         'stop-po',
         'replace-po',
-        'commands'
+        'commands',
+        'queue',
+        'ac-mode',
+        'ac-stop',
+        'remove'
+        // 'train',
+        // 'research',
+        // 'gather',
+        // 'train',
+        // 'build',
+        // 'done',
+        // 'atk'
     ];
     
     const sillyCommands = require('../common/getSillyMessages')();

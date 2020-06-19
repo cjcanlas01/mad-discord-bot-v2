@@ -9,5 +9,6 @@ module.exports = function getConfig() {
         GOOGLE_SERVICE_ACCOUNT_EMAIL: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
         GOOGLE_PRIVATE_KEY: process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n'),
         INTRODUCTION_CHANNEL: process.env.INTRODUCTION_CHANNEL || 'welcome',
+        QUEUE_CHANNEL: process.env.QUEUE_CHANNEL || 'po-queue'
     };
 };

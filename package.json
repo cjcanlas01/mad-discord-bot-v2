@@ -4,7 +4,9 @@
   "description": "A discord bot of multiple uses.",
   "main": "app.js",
   "scripts": {
-    "dev": "nodemon app.js"
+    "dev": "nodemon app.js",
+    "start": "nodemon --ignore 'config/*'",
+    "config": "nodemon app.js --config nodemon.json"
   },
   "author": "CJ Canlas",
   "license": "ISC",
