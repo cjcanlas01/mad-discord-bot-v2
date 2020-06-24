@@ -23,6 +23,7 @@ const commandHandler = (client, message, prefix) => {
         'start-po',
         'stop-po',
         'replace-po',
+        'commands'
     ];
     
     const sillyCommands = require('../common/getSillyMessages')();
