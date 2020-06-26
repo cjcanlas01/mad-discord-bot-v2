@@ -98,7 +98,8 @@ const commandHandler = (client, message, prefix) => {
         'queue',
         'ac-mode',
         'ac-stop',
-        'remove'
+        'remove',
+        'reset-queue'
         // 'train',
         // 'research',
         // 'gather',
