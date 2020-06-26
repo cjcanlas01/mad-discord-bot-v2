@@ -97,7 +97,12 @@ const getUser = (message) => {
     if (userContent) {
         user = userContent;
     } else {
-        user = message.guild.member(message.author).nickname;
+        let nickname = message.guild.member(message.author).nickname;
+        if (nickname) {
+            user = nickname;
+        } else {
+            user = message.guild.member(message.author).user.username;
+        }
     }
 
     return user;

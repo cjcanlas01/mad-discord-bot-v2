@@ -82,7 +82,8 @@ const commandHandler = (client, message, prefix) => {
                 return;
             }
         } else {
-            message.channel.send('Please use proper command syntax. Thank you.');
+            // message.channel.send('Please use proper command syntax. Thank you.');
+            console.log('User tag is used!');
         }
     }
 
