@@ -43,7 +43,7 @@ module.exports = {
 					}, 1000);
 				}
 
-				message.channel.send(`@here \n NOW! The Protocol officer has been replaced. New Protocol officer is ${message.author.toString()}.`);
+				message.channel.send(`NOW! The Protocol officer has been replaced. New Protocol officer is ${message.author.toString()}.`);
 				return;
 			}
 
