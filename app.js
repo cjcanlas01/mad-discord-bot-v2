@@ -29,7 +29,7 @@ client.on('message', message => {
 	const PREFIX1 = config.PREFIX1;
 	const PREFIX2 = config.PREFIX2;
 
-	if(message.content.startsWith(PREFIX2)) {
+	if(message.content.startsWith(PREFIX2) || message.content.startsWith('<')) {
 		commandHandler(client, message, PREFIX2);
 		return;
 	}

@@ -1,0 +1,27 @@
+[
+     {
+         "name": "Chief Builder",
+         "value": "[EMPTY]",
+         "inline": true
+     },
+     {
+         "name": "Grand Maester",
+         "value": "[EMPTY]",
+         "inline": true
+     },
+     {
+         "name": "Master of Ships",
+         "value": "[EMPTY]",
+         "inline": true
+     },
+     {
+         "name": "Master of Whisperers",
+         "value": "[EMPTY]",
+         "inline": true
+     },
+     {
+         "name": "Lord Commander",
+         "value": "[EMPTY]",
+         "inline": true
+     }
+ ]
