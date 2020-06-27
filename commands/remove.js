@@ -8,7 +8,7 @@ const config = require('../common/getConfig')();
 module.exports = {
 	name: 'remove',
 	description: 'Remove user from the title queue.',
-	syntax: `${config.PREFIX1}remove <Discord User Tag> or ${config.PREFIX2}remove <Username>`,
+	syntax: `${config.PREFIX1}remove <Discord User Tag> or ${config.PREFIX1}remove <Username>`,
 	includes: true,
 	execute(message, args) {
 		
@@ -27,7 +27,12 @@ module.exports = {
 				user = message.guild.members.cache.find((data) => {
 					return data.id == id;
 				});
-				user = user.nickname;
+
+				if (user.nickname) {
+					user = user.nickname
+				} else {
+					user = user.user.username
+				}
 			} else {
 				// For getting string name as argument
 				user = args.join(" ");
