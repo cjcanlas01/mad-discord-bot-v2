@@ -56,7 +56,6 @@ const displayQueue = (message) => {
             readJson('/data/queue.json')
                 .then((json) => {
                     const title = '**K40 Title Queue**';
-                    // const footer = 'Created and maintained by: [MAD] Q Coldwater';
             	   	const footer = 'MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD!';
                     channel.send(embed(json, title, footer));
                 })
@@ -83,9 +82,16 @@ const titleConstants = () => {
  * @param message | Discord Message 
  */
 const getUser = (message) => {
+
+    // Ignore this collection of words as third argument
+    const ignore = [
+        'pls',
+        'please'
+    ];
+
     const msgContent = message.content.split(" ");
     let userContent = msgContent.filter((elem) => {
-        return !elem.startsWith("<");
+        return !elem.startsWith("<") && !elem.startsWith("!");
     });
 
     if (userContent.length > 1) {
@@ -95,7 +101,7 @@ const getUser = (message) => {
     }
 
     let user;
-    if (userContent) {
+    if (userContent && !ignore.includes(userContent)) {
         user = userContent;
     } else {
         let nickname = message.guild.member(message.author).nickname;
@@ -254,7 +260,7 @@ const removeNameInQueue = (message, user) => {
                         throw new Error(err);
                     });
             } else {
-                message.channel.send('You are not in any queue. Please don\'t waste my time.');
+                message.channel.send('You are not in any queue.');
             }
     })
     .catch((err) => {

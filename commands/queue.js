@@ -9,7 +9,7 @@ const config = require('../common/getConfig')();
 module.exports = {
 	name: 'queue',
 	description: 'Show list of requested titles in queue.',
-	syntax: `${config.PREFIX2}queue`,
+	syntax: `${config.PREFIX1}queue`,
 	includes: true,
 	execute(message) {
 

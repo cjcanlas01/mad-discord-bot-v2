@@ -1,7 +1,7 @@
 const fs = require('fs');
 const Discord = require('discord.js');
-const getConfig = require('./common/getConfig');
-const config = getConfig();
+const config = require('./common/getConfig')();
+const settings = require('./settings.json');
 const client = new Discord.Client();
 const { commandHandler } = require('./common/trackingSystem');
 
@@ -27,30 +27,85 @@ for (const file of commandFiles) {
 
 client.on('message', message => {
 	const PREFIX1 = config.PREFIX1;
-	const PREFIX2 = config.PREFIX2;
 
-	if(message.content.startsWith(PREFIX2) || message.content.startsWith('<')) {
-		commandHandler(client, message, PREFIX2);
+	// For commands that starts with tag i.e. @Role
+	if (message.content.startsWith('<') && !message.author.bot) {
+		/**
+		* Get role details
+		* @param id 
+		* @returns role obj
+		*/
+		const getRoleDetails = (id) => {
+			return message.guild.roles.cache.find((data) => {
+				return data.id == id;
+			});
+		}
+
+		// Parse tag to get only the id
+		const parseIdTag = (tag) => {
+			if (!tag) {
+				return false;
+			}
+
+			const numberPattern = /\d+/g;
+			return tag.match(numberPattern).join('');
+		}
+
+		const msgContent = message.content.split(" ");
+		const protocolOfficer = getRoleDetails(
+			parseIdTag(msgContent[0])
+		);
+
+		// Check if Protocol Officer is used as first tag
+		if (protocolOfficer && protocolOfficer.name != settings.PO_ROLE) {
+			return false;
+		}
+
+		let role = (function () {
+			let index = msgContent.findIndex((elem) => {
+				return !elem.startsWith("<");
+			});
+
+			if (index == -1) {
+				return parseIdTag(msgContent[msgContent.length - 1]);
+			}
+
+			return parseIdTag(msgContent[index - 1]);
+		})();
+
+		role = getRoleDetails(role);
+		let roleLowerCased;
+
+		if (role) {
+			roleLowerCased = role.name.toLowerCase();
+		}
+
+		if (role && msgContent.length >= 2) {
+			// Commands using roles, has @ identifier
+			const titleCommands = [
+				'research',
+				'gather',
+				'training',
+				'building',
+				'atk',
+			];
+
+			if (titleCommands.includes(roleLowerCased)) {
+				client.commands.get(roleLowerCased).execute(message);
+				return true;
+			} else {
+				message.channel.send('Command not found!');
+				return;
+			}
+		}
+	}
+
+	// For commands that starts with prefix
+	if(message.content.startsWith(PREFIX1)) {
+		commandHandler(client, message, PREFIX1);
 		return;
 	}
 
-	if (!message.content.startsWith(PREFIX1) || message.author.bot) return;
-	const acceptableCommands = [
-        'calc',
-        'help'
-    ];
-	
-	const args = message.content.slice(PREFIX1.length);
-	const command = args.trim().split(" ")[0];
-
-	if (!client.commands.has(command) || !acceptableCommands.includes(command)) return;
-
-	try {
-		client.commands.get(command).execute(message, args);
-	} catch (error) {
-		console.error(error);
-		message.reply('there was an error trying to execute that command!');
-	}
 });
 
 client.login(config.TOKEN);

@@ -5,7 +5,7 @@ const config = require('../common/getConfig')();
 module.exports = {
 	name: 'ac-stop',
 	description: 'AC Lord Commander Buff MODE',
-	syntax: `${config.PREFIX2}AC-stop`,
+	syntax: `${config.PREFIX1}AC-stop`,
 	includes: true,
     execute(message) {
 

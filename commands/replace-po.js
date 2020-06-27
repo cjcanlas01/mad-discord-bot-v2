@@ -6,7 +6,7 @@ const config = require('../common/getConfig')();
 module.exports = {
 	name: 'replace-po',
 	description: 'Replace current Protocol officer in case he/ she becomes afk.',
-	syntax: `${config.PREFIX2}replace-po`,
+	syntax: `${config.PREFIX1}replace-po`,
 	includes: true,
 	execute(message) {
 		

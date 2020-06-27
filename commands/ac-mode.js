@@ -5,7 +5,7 @@ const config = require('../common/getConfig')();
 module.exports = {
 	name: 'ac-mode',
 	description: 'AC Lord Commander Buff MODE',
-	syntax: `${config.PREFIX2}AC-mode`,
+	syntax: `${config.PREFIX1}AC-mode`,
 	includes: true,
     execute(message) {
         

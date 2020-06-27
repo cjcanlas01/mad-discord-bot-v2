@@ -2,11 +2,12 @@
  * Displays all commands of discord MAD bot
  */
 const embed = require('../common/discordEmbed');
+const config = require('../common/getConfig')();
 
 module.exports = {
 	name: 'help',
 	description: 'Show available commands of MAD bot.',
-	syntax: '$mad help',
+	syntax: `${config.PREFIX1}help`,
 	includes: true,
 	execute(message) {
 
@@ -22,6 +23,6 @@ module.exports = {
 			}
 		})
 
-		message.author.send(embed(json));
+		message.author.send(embed(json, null, 'MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD!'));
 	}
 };

@@ -4,11 +4,12 @@
 const embed = require('../common/discordEmbed');
 const getArgs = require('../common/getArgs');
 const account = require('../modules/accounting.min');
+const config = require('../common/getConfig')();
 
 module.exports = {
 	name: 'calc',
 	description: 'Compute for bank requirement.',
-	syntax: '$mad calc <shipped> <delivered> <requested>',
+	syntax: `${config.PREFIX1}calc <shipped> <delivered> <requested>`,
 	includes: true,
 	execute(message, args) {
 		const [ shipped, delivered, requested ] = getArgs(this.name, args);

@@ -6,7 +6,7 @@ const config = require('../common/getConfig')();
 module.exports = {
 	name: 'start-po',
 	description: 'Start your PO session.',
-	syntax: `${config.PREFIX2}start-po`,
+	syntax: `${config.PREFIX1}start-po`,
 	includes: true,
 	execute(message) {
 		

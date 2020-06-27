@@ -5,7 +5,7 @@ const config = require('../common/getConfig')();
 module.exports = {
 	name: 'reset-queue',
 	description: 'Reset title queue.',
-	syntax: `${config.PREFIX2}reset-queue`,
+	syntax: `${config.PREFIX1}reset-queue`,
 	includes: true,
      execute(message) {
 

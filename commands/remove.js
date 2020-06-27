@@ -8,7 +8,7 @@ const config = require('../common/getConfig')();
 module.exports = {
 	name: 'remove',
 	description: 'Remove user from the title queue.',
-	syntax: `${config.PREFIX2}remove <Discord User Tag> or ${config.PREFIX2}remove <Username>`,
+	syntax: `${config.PREFIX1}remove <Discord User Tag> or ${config.PREFIX2}remove <Username>`,
 	includes: true,
 	execute(message, args) {
 		
