@@ -1,16 +1,18 @@
 const { addRowData, prepTrackData, getCurrentPO, addOrRemoveRole } = require('../common/trackingSystem');
-
+const { hasPoAccess } = require('../common/utilities');
+const { msgPoHasNoAccess } = require('../common/messages');
+const config = require('../common/getConfig')();
 
 module.exports = {
 	name: 'replace-po',
 	description: 'Replace current Protocol officer in case he/ she becomes afk.',
-	syntax: '!replace-po',
+	syntax: `${config.PREFIX2}replace-po`,
 	includes: true,
 	execute(message) {
 		
 		// Check if user has proper role for access
-		if(!message.member.roles.cache.find(role => role.name === "poaccess")) {
-			message.channel.send(`${message.author.toString()}, you do not have access for Protocol Officer!`);
+		if (!hasPoAccess(message)) {
+			msgPoHasNoAccess(message);
 			return false;
 		}
 

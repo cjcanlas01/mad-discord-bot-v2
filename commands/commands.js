@@ -2,11 +2,12 @@
  * Displays all commands of discord MAD bot
  */
 const commands = require('../common/getSillyMessages');
+const config = require('../common/getConfig')();
 
 module.exports = {
 	name: 'commands',
 	description: 'Shows list of commands.',
-	syntax: '!commands',
+	syntax: `${config.PREFIX2}commands`,
 	includes: true,
 	execute(message) {
           const keys = Array.from(commands().keys());

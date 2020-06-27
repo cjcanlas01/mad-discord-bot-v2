@@ -1,8 +1,9 @@
 const fs = require('fs');
 const path = require('path');
 const embed = require('../common/discordEmbed');
-const getConfig = require('../common/getConfig');
-const config = getConfig();
+const config = require('../common/getConfig')();
+const settings = require('../settings.json');
+
 /** 
  * Function to read file on prorject dir
  * @param dir | Folder name + filename
@@ -261,6 +262,14 @@ const removeNameInQueue = (message, user) => {
     });
 }
 
+const hasPoAccess = (message) => {
+    if (message.member.roles.cache.find(role => role.name === settings.PO_ACCESS_ROLE)) {
+        return true;
+    }
+
+    return false;
+}
+
 module.exports = {
     readJson,
     writeJson,
@@ -268,5 +277,6 @@ module.exports = {
     titleConstants,
     displayQueue,
     removeNameInQueue,
-    getUser
+    getUser,
+    hasPoAccess
 }

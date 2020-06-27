@@ -1,15 +1,17 @@
-const { writeJson, displayQueue } = require('../common/utilities');
+const { writeJson, displayQueue, hasPoAccess } = require('../common/utilities');
+const { msgPoHasNoAccess } = require('../common/messages');
+const config = require('../common/getConfig')();
 
 module.exports = {
 	name: 'reset-queue',
 	description: 'Reset title queue.',
-	syntax: '!reset-queue',
+	syntax: `${config.PREFIX2}reset-queue`,
 	includes: true,
      execute(message) {
 
           // Check if user has proper role for access
-		if(!message.member.roles.cache.find(role => role.name === "poaccess")) {
-			message.channel.send(`${message.author.toString()}, you do not have access for Protocol Officer!`);
+		if (!hasPoAccess(message)) {
+			msgPoHasNoAccess(message);
 			return false;
 		}
           

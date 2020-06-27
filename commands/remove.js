@@ -1,19 +1,21 @@
 /**
  * Displays list of requested titles queue
  */
-const { removeNameInQueue } = require('../common/utilities');
+const { removeNameInQueue, hasPoAccess } = require('../common/utilities');
+const { msgPoHasNoAccess } = require('../common/messages');
+const config = require('../common/getConfig')();
 
 module.exports = {
 	name: 'remove',
 	description: 'Remove user from the title queue.',
-	syntax: '!remove <Discord User Tag> or !remove <Username>',
+	syntax: `${config.PREFIX2}remove <Discord User Tag> or ${config.PREFIX2}remove <Username>`,
 	includes: true,
 	execute(message, args) {
 		
 		// Check if user has proper role for access
-		if(!message.member.roles.cache.find(role => role.name === "poaccess")) {
-			message.channel.send(`${message.author.toString()}, you do not have access for Protocol Officer!`);
-			return false;
+		if (!hasPoAccess(message)) {
+			msgPoHasNoAccess(message);
+			   return false;
 		}
 
 		let user;

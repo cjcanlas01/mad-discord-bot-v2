@@ -1,17 +1,19 @@
-const { readJson, writeJson } = require('../common/utilities');
+const { readJson, writeJson, hasPoAccess } = require('../common/utilities');
+const { msgPoHasNoAccess } = require('../common/messages');
+const config = require('../common/getConfig')();
 
 module.exports = {
 	name: 'ac-stop',
 	description: 'AC Lord Commander Buff MODE',
-	syntax: '!AC-stop',
+	syntax: `${config.PREFIX2}AC-stop`,
 	includes: true,
     execute(message) {
 
         // Check if user has proper role for access
-		if(!message.member.roles.cache.find(role => role.name === "poaccess")) {
-			message.channel.send(`${message.author.toString()}, you do not have access for Protocol Officer!`);
+        if (!hasPoAccess(message)) {
+            msgPoHasNoAccess(message);
 			return false;
-        }
+		}
         
         readJson('/data/buff-mode.json')
            .then(data => {
