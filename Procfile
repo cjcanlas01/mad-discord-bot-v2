@@ -1,1 +1,1 @@
-worker: npm run config
+worker: node app.js
