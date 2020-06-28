@@ -56,6 +56,11 @@ client.on('message', message => {
 			parseIdTag(msgContent[0])
 		);
 
+		// Check for the channel access
+		if (message.channel.name != config.BUFF_CHANNEL) {
+			return false;
+		}
+
 		// Check if Protocol Officer is used as first tag
 		if (protocolOfficer && protocolOfficer.name != settings.PO_ROLE) {
 			return false;

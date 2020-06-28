@@ -7,6 +7,11 @@ module.exports = {
 	syntax: `${config.PREFIX1}done or ${config.PREFIX1}done <Username>`,
 	includes: true,
 	execute(message) {
+		
+		// Check for the channel access
+		if (message.channel.name != config.BUFF_CHANNEL) {
+			return false;
+		}
 
 		removeNameInQueue(message, getUser(message));
 		

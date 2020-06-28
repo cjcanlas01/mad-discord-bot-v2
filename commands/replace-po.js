@@ -9,7 +9,12 @@ module.exports = {
 	syntax: `${config.PREFIX1}replace-po`,
 	includes: true,
 	execute(message) {
-		
+
+		// Check for the channel access
+		if (message.channel.name != config.BUFF_CHANNEL) {
+			return false;
+		}
+
 		// Check if user has proper role for access
 		if (!hasPoAccess(message)) {
 			msgPoHasNoAccess(message);

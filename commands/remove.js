@@ -11,6 +11,11 @@ module.exports = {
 	syntax: `${config.PREFIX1}remove <Discord User Tag> or ${config.PREFIX1}remove <Username>`,
 	includes: true,
 	execute(message, args) {
+
+		// Check for the channel access
+		if (message.channel.name != config.BUFF_CHANNEL) {
+			return false;
+		}
 		
 		// Check if user has proper role for access
 		if (!hasPoAccess(message)) {

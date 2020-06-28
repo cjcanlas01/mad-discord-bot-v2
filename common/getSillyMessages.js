@@ -6,6 +6,7 @@ module.exports = () => {
         ['hale2-queen', 'May we All Hail the Queen for she is Goodness and behold great Power- she may torch your arse if you don\'t'],
         ['grey', 'I was never the biggest, I was never the strongest, but I was the bravest from all of us that has no dicks'],
         ['hotpie', 'A good kidney pie is all about the ingredients. Flour, lard, water, eggs, milk - easy enough. But the meat? Peacetime or not, getting your hands on a good bottom round steak and calves\' kidneys is not easy. I mean, some people settle for plain old beef kidneys. Got no right to cook anything, them. Oh, and the gravy! Don\'t get me started on the gravy. Very difficult to get right. See, a lot of people give up on the gravy. You cannot give up on the gravy. No gravy, no pie - Simple as that.'],
+        ['shout-out', 'Lets give a quick shout out to Christina Applegate \n https://cdn.discordapp.com/attachments/720536194286354444/726200803861463101/maxresdefault.png'],
         // --------------- IMAGES & GIFS
         ['scare-pazz', 'https://cdn.discordapp.com/attachments/690770760389885952/720464409117589524/Papa-RoachHEADER.png\nhttps://tenor.com/view/roaches-roach-joes-apartment-mtv-cockroach-gif-4944040\nhttps://tenor.com/view/roach-band-roach-chips-sing-joes-apartment-gif-5000498'],
         ['facepalm', 'https://tenor.com/view/picard-facepalm-startrek-gif-5582617'],
