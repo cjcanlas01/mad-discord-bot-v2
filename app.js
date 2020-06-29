@@ -10,7 +10,7 @@ const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('
 
 client.once('ready', () => {
 	console.log('Ready!');
-	client.user.setActivity(`${ config.PREFIX1 } help`, { type: 'LISTENING' });
+	client.user.setActivity(`${ config.PREFIX1 }help`, { type: 'LISTENING' });
 });
 
 if (config.INTRODUCTION_CHANNEL) {

@@ -37,6 +37,7 @@ const commandHandler = (client, message, prefix) => {
         'r-rallies',
         'd-rallies',
         'unc-tp',
+        'rtj-tp',
     ];
     
     const sillyCommands = require('../common/getSillyMessages')();
