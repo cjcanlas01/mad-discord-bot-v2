@@ -2,6 +2,8 @@ const getConfig = require('../common/getConfig');
 const config = getConfig();
 const { GoogleSpreadsheet } = require('google-spreadsheet');
 const doc = new GoogleSpreadsheet(config.SPREADSHEET_ID);
+const settings = require('../settings.json');
+
 /**
  * Function to read commands only available with prefix "!"
  * 
@@ -31,7 +33,10 @@ const commandHandler = (client, message, prefix) => {
         'reset-queue',
         'calc',
         'help',
-        'done'
+        'done',
+        'r-rallies',
+        'd-rallies',
+        'unc-tp',
     ];
     
     const sillyCommands = require('../common/getSillyMessages')();
@@ -168,7 +173,7 @@ const addOrRemoveRole = (id, condition, message) => {
 	message.guild.members
 	.fetch(id)
 	.then((memberData) => {
-		const role = getRoleObj('Protocol Officer', message);
+		const role = getRoleObj(settings.PO_ROLE, message);
 		if(condition) {
 			memberData.roles.add(role);
 		} else {
@@ -187,7 +192,7 @@ const getCurrentPO = (message) => {
     // Get list of all members with Protocol officer role
     const poData = message.guild.members.cache.filter(member => {
         return member.roles.cache.find(data => {
-            return data.name == "Protocol Officer";
+            return data.name == settings.PO_ROLE;
         })
     }).map(member => {
         return {
