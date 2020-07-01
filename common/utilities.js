@@ -172,7 +172,7 @@ const poSystem = (message, buffTitle) => {
                                 }
 
                                 value.push(user);
-                                message.react('✅');
+                                message.react('☑️');
                                 message.channel.send(`${message.author}, ${user} added to the ${buffTitle} queue.`);
                             }
                             obj['value'] = value;
@@ -249,8 +249,7 @@ const removeNameInQueue = (message, user) => {
                     .then((data) => {
                         console.log(data);
                         if(data) {
-                            // message.channel.send('Bot notified!');
-                            message.react('👀');
+                            message.react('✅');
                         }
                         displayQueue(message);
                     })
