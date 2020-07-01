@@ -49,14 +49,12 @@ const writeJson = (dir, data) => {
 const displayQueue = (message) => {
     const channel = message.guild.channels.cache.find(ch => ch.name === config.QUEUE_CHANNEL);
     // For deleting message
-    channel.messages.fetch(channel.lastMessageID)
+    channel.bulkDelete(100)
         .then(msg => {
-            // msg.delete({ timeout: 1000 })
-            msg.delete();
             readJson('/data/queue.json')
                 .then((json) => {
                     const title = '**K40 Title Queue**';
-            	   	const footer = 'MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD!';
+                    const footer = 'MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD!';
                     channel.send(embed(json, title, footer));
                 })
                 .catch((err) => {

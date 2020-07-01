@@ -5,9 +5,9 @@ const embed = require('../common/discordEmbed');
 const config = require('../common/getConfig')();
 
 module.exports = {
-	name: 'help',
+	name: 'madhelp',
 	description: 'Show available commands of MAD bot.',
-	syntax: `${config.PREFIX1}help`,
+	syntax: `${config.PREFIX1}madhelp`,
 	includes: true,
 	execute(message) {
 

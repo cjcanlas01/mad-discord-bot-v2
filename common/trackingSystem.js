@@ -32,12 +32,18 @@ const commandHandler = (client, message, prefix) => {
         'remove',
         'reset-queue',
         'calc',
-        'help',
+        'madhelp',
         'done',
         'r-rallies',
         'd-rallies',
         'unc-tp',
         'rtj-tp',
+        'startpurge',
+        'endpurge',
+        'hive',
+        'rf',
+        'tf',
+        'bf',
     ];
     
     const sillyCommands = require('../common/getSillyMessages')();
