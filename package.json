@@ -4,17 +4,17 @@
   "description": "A discord bot of multiple uses.",
   "main": "app.js",
   "scripts": {
-    "dev": "nodemon app.js",
-    "start": "nodemon --ignore 'config/*'",
-    "config": "nodemon app.js --config nodemon.json"
+    "dev": "nodemon app.js --config nodemon.json",
+    "start": "node app.js"
   },
   "author": "CJ Canlas",
   "license": "ISC",
   "dependencies": {
     "discord.js": "^12.2.0",
     "dotenv": "^8.2.0",
-    "google-spreadsheet": "^3.0.11",
-    "nodemon": "^2.0.3",
-    "sessionstorage": "^0.1.0"
+    "google-spreadsheet": "^3.0.11"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
   }
 }
