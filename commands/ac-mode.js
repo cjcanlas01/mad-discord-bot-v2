@@ -6,7 +6,7 @@ module.exports = {
   name: "ac-mode",
   description: "AC Lord Commander Buff MODE",
   syntax: `${config.PREFIX1}AC-mode`,
-  includes: true,
+  po: true,
   execute(message) {
     // Check for the channel access
     if (message.channel.name != config.BUFF_CHANNEL) {

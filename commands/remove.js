@@ -9,7 +9,7 @@ module.exports = {
   name: "remove",
   description: "Remove user from the title queue.",
   syntax: `${config.PREFIX1}remove <Discord User Tag> or ${config.PREFIX1}remove <Username>`,
-  includes: true,
+  po: true,
   execute(message, args) {
     // Check for the channel access
     if (message.channel.name != config.BUFF_CHANNEL) {

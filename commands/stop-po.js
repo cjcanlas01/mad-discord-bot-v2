@@ -12,7 +12,7 @@ module.exports = {
   name: "stop-po",
   description: "Stop your PO session.",
   syntax: `${config.PREFIX1}stop-po`,
-  includes: true,
+  po: true,
   execute(message) {
     // Check for the channel access
     if (message.channel.name != config.BUFF_CHANNEL) {

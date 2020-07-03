@@ -12,7 +12,7 @@ module.exports = {
   name: "replace-po",
   description: "Replace current Protocol officer in case he/ she becomes afk.",
   syntax: `${config.PREFIX1}replace-po`,
-  includes: true,
+  po: true,
   execute(message) {
     // Check for the channel access
     if (message.channel.name != config.BUFF_CHANNEL) {

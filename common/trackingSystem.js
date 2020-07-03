@@ -47,6 +47,7 @@ const commandHandler = (client, message, prefix) => {
     "ty2",
     "ty3",
     "banners",
+    "po",
   ];
 
   const sillyCommands = require("../common/getSillyMessages")();

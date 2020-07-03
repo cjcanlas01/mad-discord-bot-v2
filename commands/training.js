@@ -6,8 +6,8 @@ module.exports = {
     titleConstants().MASTER_OF_WHISPERERS
   }**).`,
   syntax:
-    "@Protocol Offcer @Training or @Protocol Officer @Training <Discord User Tag>",
-  includes: true,
+    "@Protocol Offcer @Training or @Protocol Officer @Training <Username>",
+  po: true,
   execute(message) {
     const BUFF_TITLE = titleConstants().MASTER_OF_WHISPERERS;
     poSystem(message, BUFF_TITLE);

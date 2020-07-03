@@ -6,8 +6,8 @@ module.exports = {
     titleConstants().GRAND_MAESTER
   }**).`,
   syntax:
-    "@Protocol Offcer @Research or @Protocol Officer @Research <Discord User Tag>",
-  includes: true,
+    "@Protocol Offcer @Research or @Protocol Officer @Research <Username>",
+  po: true,
   execute(message) {
     const BUFF_TITLE = titleConstants().GRAND_MAESTER;
     poSystem(message, BUFF_TITLE);

@@ -6,7 +6,7 @@ module.exports = {
   name: "reset-queue",
   description: "Reset title queue.",
   syntax: `${config.PREFIX1}reset-queue`,
-  includes: true,
+  po: true,
   execute(message) {
     // Check if user has proper role for access
     if (!hasPoAccess(message)) {

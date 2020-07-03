@@ -5,9 +5,8 @@ module.exports = {
   description: `Command for requesting __gathering buff__ (**${
     titleConstants().MASTER_OF_SHIPS
   }**).`,
-  syntax:
-    "@Protocol Officer @Gather or @Protocol Officer @Gather <Discord User Tag>",
-  includes: true,
+  syntax: "@Protocol Officer @Gather or @Protocol Officer @Gather <Username>",
+  po: true,
   execute(message) {
     const BUFF_TITLE = titleConstants().MASTER_OF_SHIPS;
     poSystem(message, BUFF_TITLE);
