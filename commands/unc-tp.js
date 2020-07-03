@@ -6,7 +6,7 @@ module.exports = {
   name: "unc-tp",
   description: `Show Unicorn Express Tranport banner.`,
   syntax: `${config.PREFIX1}unc-tp`,
-  includes: true,
+  banners: true,
   execute(message) {
     // Get bank role
     const bank = getRoleObj(settings.BANK_ROLE, message);

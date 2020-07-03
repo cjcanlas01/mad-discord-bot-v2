@@ -4,7 +4,7 @@ module.exports = {
   name: "tf",
   description: `Show Training Fair banner.`,
   syntax: `${config.PREFIX1}tf`,
-  includes: true,
+  banners: true,
   execute(message) {
     // Get bank role
     message.channel.send("@everyone", {

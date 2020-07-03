@@ -6,7 +6,7 @@ module.exports = {
   name: "rtj-tp",
   description: `Show Run The Jewels Transport banner.`,
   syntax: `${config.PREFIX1}rtj-tp`,
-  includes: true,
+  banners: true,
   execute(message) {
     // Get bank role
     const bank = getRoleObj(settings.BANK_ROLE, message);
