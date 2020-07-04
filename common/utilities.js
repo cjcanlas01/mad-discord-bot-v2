@@ -91,7 +91,7 @@ const titleConstants = () => {
  */
 const getUser = (message) => {
   // Ignore this collection of words as third argument
-  const ignore = ["pls", "please"];
+  const ignore = ["pls", "please", "plz", "pls?", "please?", "plz"];
 
   const msgContent = message.content.split(" ");
   let userContent = msgContent.filter((elem) => {
