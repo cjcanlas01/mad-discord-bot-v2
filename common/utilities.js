@@ -3,6 +3,7 @@ const path = require("path");
 const embed = require("../common/discordEmbed");
 const config = require("../common/getConfig")();
 const settings = require("../settings.json");
+const { getCurrentPO } = require("../common/trackingSystem");
 
 /**
  * Function to read file on prorject dir
@@ -124,16 +125,15 @@ const poSystem = (message, buffTitle) => {
     .then((buffData) => {
       if (buffData) {
         const buffMode = buffData["buff-mode"];
-        // Determine if buff mode is inactive and title requested is Lord Commander
-        if (!buffMode && buffTitle == titleConstants().LORD_COMMANDER) {
-          // message.channel.send(`Alliance Conquest Buff Mode is inactive! Lord Commander cannot be requested.`);
-          message.react("❌");
-          return false;
-        }
 
-        // Determine if buff mode is active and title other than Lord Commander is requested
-        if (buffMode && buffTitle != titleConstants().LORD_COMMANDER) {
-          // message.channel.send(`Alliance Conquest Buff Mode is active! Regular titles are disabled!`);
+        if (
+          // Determine if buff mode is inactive and title requested is Lord Commander
+          (!buffMode && buffTitle == titleConstants().LORD_COMMANDER) ||
+          // Determine if buff mode is active and title other than Lord Commander is requested
+          (buffMode && buffTitle != titleConstants().LORD_COMMANDER) ||
+          // Check if there is a Protocol Officer online
+          !getCurrentPO(message)
+        ) {
           message.react("❌");
           return false;
         }
