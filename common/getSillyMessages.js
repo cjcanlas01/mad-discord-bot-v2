@@ -75,5 +75,9 @@ module.exports = () => {
       "69",
       "https://tenor.com/view/bill-and-ted-69-dudes-awesome-laugh-gif-17502997",
     ],
+    [
+      "juju",
+      "https://cdn.discordapp.com/attachments/723953984871858247/732063081844310057/unknown.gif",
+    ],
   ]);
 };
