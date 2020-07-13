@@ -67,5 +67,13 @@ module.exports = () => {
       "draw",
       "https://tenor.com/view/monty-python-tisbutascratch-funny-gif-9050905\nhttps://tenor.com/view/monty-python-and-the-holy-grail-just-aflesh-wound-kicked-flesh-wound-wound-gif-12275696\nhttps://tenor.com/view/monty-python-im-invincible-gif-3412315\nhttps://tenor.com/view/monty-python-draw-gif-5447899",
     ],
+    [
+      "bestbot",
+      "https://tenor.com/view/hey-im-abig-deal-anchorman-ron-burgundy-will-ferrell-gif-13050540",
+    ],
+    [
+      "69",
+      "https://tenor.com/view/bill-and-ted-69-dudes-awesome-laugh-gif-17502997",
+    ],
   ]);
 };
