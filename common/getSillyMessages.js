@@ -79,5 +79,9 @@ module.exports = () => {
       "juju",
       "https://cdn.discordapp.com/attachments/723953984871858247/732063081844310057/unknown.gif",
     ],
+    [
+      "greyswedding",
+      "https://tenor.com/view/save-the-date-wedding-gif-13803090",
+    ],
   ]);
 };
