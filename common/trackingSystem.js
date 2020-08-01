@@ -51,6 +51,8 @@ const commandHandler = (client, message, prefix) => {
     "req",
     "set-tpamt",
     "set-tptax",
+    "show-tpamt",
+    "show-tptax",
   ];
 
   const sillyCommands = require("../common/getSillyMessages")();

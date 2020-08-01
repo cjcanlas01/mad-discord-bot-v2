@@ -18,7 +18,7 @@ module.exports = {
     const fileName = "./settings.json";
     readJson(fileName).then((data) => {
       // Set transport amount
-      data.MAX_TRANSPORT_AMOUNT = taxArgument;
+      data.TRANSPORT_TAX = taxArgument;
       writeJson(fileName, data).then((data) => {
         if (data == "File update success!") {
           message.channel.send("Bank transport tax updated! Thank you.");

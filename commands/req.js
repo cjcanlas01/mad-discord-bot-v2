@@ -13,6 +13,10 @@ module.exports = {
       const TAX_RATE = Number(data.TRANSPORT_TAX);
       const TRANSPORT_AMT = Number(data.MAX_TRANSPORT_AMOUNT);
 
+      if (!TAX_RATE || !TRANSPORT_AMT) {
+        return false;
+      }
+
       // Final deliverable amount of bank
       let deliverableAmt = TRANSPORT_AMT - (TRANSPORT_AMT * TAX_RATE) / 100;
       deliverableAmt = deliverableAmt.toString().slice(0, 3);
@@ -39,7 +43,7 @@ module.exports = {
          * computing value with transport tax amount deducted
          * then compare to given decimal value
          */
-        if (Math.trunc(findAmount) == decimalInMillions) {
+        if (Math.trunc(findAmount) == Math.trunc(decimalInMillions)) {
           const isDivisbleToDeliverableAmt =
             wholeCount * deliverableAmt == resourceCount ? true : false;
 
@@ -59,12 +63,18 @@ module.exports = {
         .filter((el) => el != "!req")
         .map((el) => {
           el = el.split("-");
+          const loadDetails = computeLoadCount(data, el[1]);
+
+          if (!loadDetails) {
+            message.channel.send("Set transport tax and amount first!");
+            return false;
+          }
 
           return {
             name: `__${el[0].charAt(0).toUpperCase() + el[0].slice(1)}__`,
             value: `**Amount**: ${el[1]} million.
           ---  
-          ${computeLoadCount(data, el[1])}`,
+          ${loadDetails}`,
             inline: true,
           };
         });
@@ -75,7 +85,9 @@ module.exports = {
       //   value: message.author,
       // });
 
-      message.channel.send(embed(parsedRequest, "Bank Request Report"));
+      if (parsedRequest[0]) {
+        message.channel.send(embed(parsedRequest, "Bank Request Report"));
+      }
     });
   },
 };
