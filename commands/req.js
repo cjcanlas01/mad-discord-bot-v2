@@ -25,7 +25,6 @@ module.exports = {
       const transportCount = (resourceCount / deliverableAmt).toFixed(2);
       // Separate full and last load count
       const [wholeCount, decimalCount] = transportCount.split(".");
-      // console.log([wholeCount, decimalCount / 100, deliverableAmt]);
       let decimalAmount = deliverableAmt * (decimalCount / 100);
       decimalAmount = decimalAmount.toFixed(2);
       const decimalInMillions = decimalAmount * 1000000;
