@@ -1,5 +1,10 @@
 {
   "PO_ACCESS_ROLE": "poaccess",
   "PO_ROLE": "Protocol Officer",
-  "BANK_ROLE": "Bank"
+  "BANK_ROLE": "Bank",
+  "QUEUE_CHANNEL": "title-queue",
+  "BUFF_CHANNEL": "buff-requests",
+  "INTRODUCTION_CHANNEL": "welcome",
+  "TRANSPORT_TAX": "0",
+  "MAX_TRANSPORT_AMOUNT": "0"
 }

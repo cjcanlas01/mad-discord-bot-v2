@@ -1,6 +1,7 @@
 const { readJson, writeJson, hasPoAccess } = require("../common/utilities");
 const { msgPoHasNoAccess } = require("../common/messages");
 const config = require("../common/getConfig")();
+const settings = require("../settings.json");
 
 module.exports = {
   name: "ac-mode",
@@ -9,7 +10,7 @@ module.exports = {
   po: true,
   execute(message) {
     // Check for the channel access
-    if (message.channel.name != config.BUFF_CHANNEL) {
+    if (message.channel.name != settings.BUFF_CHANNEL) {
       return false;
     }
 

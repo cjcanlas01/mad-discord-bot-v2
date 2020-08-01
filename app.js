@@ -15,10 +15,10 @@ client.once("ready", () => {
   client.user.setActivity(`${config.PREFIX1}madhelp`, { type: "LISTENING" });
 });
 
-if (config.INTRODUCTION_CHANNEL) {
+if (settings.INTRODUCTION_CHANNEL) {
   client.on("guildMemberAdd", (member) => {
     const channel = member.guild.channels.cache.find(
-      (ch) => ch.name === config.INTRODUCTION_CHANNEL
+      (ch) => ch.name === settings.INTRODUCTION_CHANNEL
     );
     channel.send(
       `Hey ${member.toString()}, welcome to K40 Discord :tada::hugging: ! Please change your name to the character in game with your Alliance tag in front. Example : [ABC] JohnDoe`
@@ -33,7 +33,6 @@ for (const file of commandFiles) {
 
 client.on("message", (message) => {
   const PREFIX1 = config.PREFIX1;
-
   // For commands that starts with tag i.e. @Role
   if (message.content.startsWith("<") && !message.author.bot) {
     /**
@@ -61,7 +60,7 @@ client.on("message", (message) => {
     const protocolOfficer = getRoleDetails(parseIdTag(msgContent[0]));
 
     // Check for the channel access
-    if (message.channel.name != config.BUFF_CHANNEL) {
+    if (message.channel.name != settings.BUFF_CHANNEL) {
       return false;
     }
 

@@ -49,6 +49,8 @@ const commandHandler = (client, message, prefix) => {
     "banners",
     "po",
     "req",
+    "set-tpamt",
+    "set-tptax",
   ];
 
   const sillyCommands = require("../common/getSillyMessages")();
