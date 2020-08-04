@@ -10,13 +10,18 @@ module.exports = {
   execute(message) {
     const truceValue = message.content.split(" ")[1];
 
-    const prepBubbleTime = (truceValue) => {
-      const acceptableTruceValue = ["4h", "8h", "1d", "3d", "7d", "14d"];
+    if (!truceValue) {
+      message.channel.send("Missing input. Please try again.");
+      return false;
+    }
 
-      if (!acceptableTruceValue.find((el) => el == truceValue)) {
-        message.channel.send("Wrong input. Please try again.");
-        return false;
-      }
+    const prepBubbleTime = (truceValue) => {
+      // const acceptableTruceValue = ["4h", "8h", "1d", "3d", "7d", "14d"];
+
+      // if (!acceptableTruceValue.find((el) => el == truceValue)) {
+      //   message.channel.send("Wrong input. Please try again.");
+      //   return false;
+      // }
 
       truceValue = truceValue.split("");
       const timeForm = truceValue.pop();

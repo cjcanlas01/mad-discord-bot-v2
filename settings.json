@@ -1,5 +1,6 @@
 {
   "PO_ACCESS_ROLE": "poaccess",
   "PO_ROLE": "Protocol Officer",
-  "BANK_ROLE": "Bank"
+  "BANK_ROLE": "Bank",
+  "MANAGEMENT_CHANNEL": "bigmad-channel"
 }

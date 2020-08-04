@@ -3,7 +3,7 @@ const Discord = require("discord.js");
 const config = require("./common/getConfig")();
 const settings = require("./settings.json");
 const client = new Discord.Client();
-const { commandHandler, getRoleObj } = require("./common/trackingSystem");
+const { commandHandler } = require("./common/trackingSystem");
 const { readJson, writeJson } = require("./common/utilities");
 
 client.commands = new Discord.Collection();
@@ -15,8 +15,9 @@ client.once("ready", (message) => {
   console.log("Ready!");
   client.user.setActivity(`${config.PREFIX1}madhelp`, { type: "LISTENING" });
 
-  const CHANNEL = "buff-requests";
-  let channelId = client.channels.cache.find((ch) => ch.name == CHANNEL);
+  let channelId = client.channels.cache.find(
+    (ch) => ch.name == settings.MANAGEMENT_CHANNEL
+  );
   channelId = channelId.id;
 
   // Get duration between two times with 3 hours interval
