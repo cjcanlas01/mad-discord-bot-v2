@@ -48,6 +48,8 @@ const commandHandler = (client, message, prefix) => {
     "ty3",
     "banners",
     "po",
+    "set-time-unc",
+    "set-time-mad",
   ];
 
   const sillyCommands = require("../common/getSillyMessages")();
