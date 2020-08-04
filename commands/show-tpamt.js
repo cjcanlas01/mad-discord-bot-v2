@@ -1,11 +1,11 @@
 /**
  */
 const config = require("../common/getConfig")();
-const { readJson, writeJson } = require("../common/utilities");
+const { readJson } = require("../common/utilities");
 
 module.exports = {
   name: "show-tpamt",
-  description: "Show bank transport amount",
+  description: "Show bank transport amount.",
   syntax: `${config.PREFIX1}show-tpamt`,
   execute(message) {
     const fileName = "./settings.json";

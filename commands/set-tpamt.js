@@ -5,8 +5,8 @@ const { readJson, writeJson } = require("../common/utilities");
 
 module.exports = {
   name: "set-tpamt",
-  description: "Set bank transport amount",
-  syntax: `${config.PREFIX1}setp-tpamt <Bank Transport Amount>`,
+  description: "Set bank transport amount.",
+  syntax: `${config.PREFIX1}set-tpamt <Bank Transport Amount>`,
   execute(message) {
     const transportArgument = message.content.split(" ")[1];
 

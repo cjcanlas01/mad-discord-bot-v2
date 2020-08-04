@@ -5,8 +5,8 @@ const { readJson, writeJson } = require("../common/utilities");
 
 module.exports = {
   name: "set-tptax",
-  description: "Set bank transport tax",
-  syntax: `${config.PREFIX1}setp-tpamt <Bank Transport Tax>`,
+  description: "Set bank transport tax.",
+  syntax: `${config.PREFIX1}set-tptax <Bank Transport Tax>`,
   execute(message) {
     const taxArgument = message.content.split(" ")[1];
 
