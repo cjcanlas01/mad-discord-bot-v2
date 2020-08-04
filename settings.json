@@ -6,5 +6,6 @@
   "BUFF_CHANNEL": "buff-requests",
   "INTRODUCTION_CHANNEL": "welcome",
   "TRANSPORT_TAX": "7.2",
-  "MAX_TRANSPORT_AMOUNT": "4160000"
+  "MAX_TRANSPORT_AMOUNT": "4160000",
+  "MANAGEMENT_CHANNEL": "bigmad-channel"
 }

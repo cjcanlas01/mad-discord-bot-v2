@@ -53,6 +53,8 @@ const commandHandler = (client, message, prefix) => {
     "set-tptax",
     "show-tpamt",
     "show-tptax",
+    "set-time-unc",
+    "set-time-mad",
   ];
 
   const sillyCommands = require("../common/getSillyMessages")();
