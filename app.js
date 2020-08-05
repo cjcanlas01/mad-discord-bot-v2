@@ -191,7 +191,6 @@ client.on("message", (message) => {
       ];
 
       if (titleCommands.includes(roleLowerCased)) {
-        console.log([client.commands, roleLowerCased]);
         client.commands.get(roleLowerCased).execute(message);
         return true;
       } else {
