@@ -11,7 +11,7 @@ const commandFiles = fs
   .readdirSync("./commands")
   .filter((file) => file.endsWith(".js"));
 
-client.once("ready", (message) => {
+client.once("ready", () => {
   console.log("Ready!");
   client.user.setActivity(`${config.PREFIX1}madhelp`, { type: "LISTENING" });
 
