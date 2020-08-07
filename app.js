@@ -41,13 +41,22 @@ client.once("ready", () => {
     check,
     currentDateTime,
     client,
+    channelId,
     bankType,
     fileName,
     fileData
   ) => {
     if (duration && !check) {
       duration = getDateDurations(duration);
-      if (currentDateTime >= duration[0] && currentDateTime <= duration[1]) {
+      // For checking time logs
+      // console.log([
+      //   new Date(currentDateTime) + " | " + new Date(duration[0]),
+      //   new Date(currentDateTime) + " | " + new Date(duration[1]),
+      // ]);
+      if (
+        new Date(currentDateTime) >= new Date(duration[0]) &&
+        new Date(currentDateTime) <= new Date(duration[1])
+      ) {
         if (bankType == "MAD") {
           fileData["MAD-CHECK"] = true;
         } else {
@@ -68,12 +77,12 @@ client.once("ready", () => {
     }
   };
 
-  const d = new Date();
-  const date = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
-  const time = `${d.getHours()}:${d.getMinutes()}`;
-  const currentDateTime = date + " " + time;
-
   setInterval(() => {
+    const d = new Date();
+    const date = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+    const time = `${d.getHours()}:${d.getMinutes()}`;
+    const currentDateTime = date + " " + time;
+
     const fileName = "./data/time-store.json";
     readJson(fileName).then((data) => {
       let MAD_DURATION = data["MAD-BANK"];
@@ -86,6 +95,7 @@ client.once("ready", () => {
         MAD_CHECK,
         currentDateTime,
         client,
+        channelId,
         "MAD",
         fileName,
         data
@@ -96,6 +106,7 @@ client.once("ready", () => {
         UNC_CHECK,
         currentDateTime,
         client,
+        channelId,
         "UNC",
         fileName,
         data
