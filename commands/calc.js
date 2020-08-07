@@ -2,7 +2,6 @@
  * Computes bank requirements and returns if request is available or not
  */
 const embed = require("../common/discordEmbed");
-const getArgs = require("../common/getArgs");
 const account = require("../modules/accounting.min");
 const config = require("../common/getConfig")();
 
@@ -12,7 +11,7 @@ module.exports = {
   syntax: `${config.PREFIX1}calc <shipped> <delivered> <requested>`,
   includes: true,
   execute(message, args) {
-    const [shipped, delivered, requested] = getArgs(this.name, args);
+    const [shipped, delivered, requested] = args;
     const percentMultiplicator = 5;
 
     const totalBalance = Number(shipped) * percentMultiplicator;

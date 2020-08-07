@@ -48,6 +48,11 @@ const commandHandler = (client, message, prefix) => {
     "ty3",
     "banners",
     "po",
+    "req",
+    "set-tpamt",
+    "set-tptax",
+    "show-tpamt",
+    "show-tptax",
     "set-time-unc",
     "set-time-mad",
   ];

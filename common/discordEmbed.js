@@ -5,7 +5,7 @@
  */
 const Discord = require("discord.js");
 
-module.exports = discordEmbed = (fields, title, footer = null) => {
+module.exports = discordEmbed = (fields, title = null, footer = null) => {
   const setTitle = title ? title : "MAD is here! How can I help?";
   const setFooter = footer ? footer : "What is MAD may never die!";
   return new Discord.MessageEmbed()

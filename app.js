@@ -41,13 +41,22 @@ client.once("ready", () => {
     check,
     currentDateTime,
     client,
+    channelId,
     bankType,
     fileName,
     fileData
   ) => {
     if (duration && !check) {
       duration = getDateDurations(duration);
-      if (currentDateTime >= duration[0] && currentDateTime <= duration[1]) {
+      // For checking time logs
+      // console.log([
+      //   new Date(currentDateTime) + " | " + new Date(duration[0]),
+      //   new Date(currentDateTime) + " | " + new Date(duration[1]),
+      // ]);
+      if (
+        new Date(currentDateTime) >= new Date(duration[0]) &&
+        new Date(currentDateTime) <= new Date(duration[1])
+      ) {
         if (bankType == "MAD") {
           fileData["MAD-CHECK"] = true;
         } else {
@@ -68,12 +77,12 @@ client.once("ready", () => {
     }
   };
 
-  const d = new Date();
-  const date = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
-  const time = `${d.getHours()}:${d.getMinutes()}`;
-  const currentDateTime = date + " " + time;
-
   setInterval(() => {
+    const d = new Date();
+    const date = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+    const time = `${d.getHours()}:${d.getMinutes()}`;
+    const currentDateTime = date + " " + time;
+
     const fileName = "./data/time-store.json";
     readJson(fileName).then((data) => {
       let MAD_DURATION = data["MAD-BANK"];
@@ -86,6 +95,7 @@ client.once("ready", () => {
         MAD_CHECK,
         currentDateTime,
         client,
+        channelId,
         "MAD",
         fileName,
         data
@@ -96,6 +106,7 @@ client.once("ready", () => {
         UNC_CHECK,
         currentDateTime,
         client,
+        channelId,
         "UNC",
         fileName,
         data
@@ -107,10 +118,10 @@ client.once("ready", () => {
   }, 10000);
 });
 
-if (config.INTRODUCTION_CHANNEL) {
+if (settings.INTRODUCTION_CHANNEL) {
   client.on("guildMemberAdd", (member) => {
     const channel = member.guild.channels.cache.find(
-      (ch) => ch.name === config.INTRODUCTION_CHANNEL
+      (ch) => ch.name === settings.INTRODUCTION_CHANNEL
     );
     channel.send(
       `Hey ${member.toString()}, welcome to K40 Discord :tada::hugging: ! Please change your name to the character in game with your Alliance tag in front. Example : [ABC] JohnDoe`
@@ -125,7 +136,6 @@ for (const file of commandFiles) {
 
 client.on("message", (message) => {
   const PREFIX1 = config.PREFIX1;
-
   // For commands that starts with tag i.e. @Role
   if (message.content.startsWith("<") && !message.author.bot) {
     /**
@@ -153,7 +163,7 @@ client.on("message", (message) => {
     const protocolOfficer = getRoleDetails(parseIdTag(msgContent[0]));
 
     // Check for the channel access
-    if (message.channel.name != config.BUFF_CHANNEL) {
+    if (message.channel.name != settings.BUFF_CHANNEL) {
       return false;
     }
 

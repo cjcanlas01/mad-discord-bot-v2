@@ -54,7 +54,7 @@ const writeJson = (dir, data) => {
  */
 const displayQueue = (message) => {
   const channel = message.guild.channels.cache.find(
-    (ch) => ch.name === config.QUEUE_CHANNEL
+    (ch) => ch.name === settings.QUEUE_CHANNEL
   );
   // For deleting message
   channel
