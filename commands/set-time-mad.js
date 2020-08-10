@@ -8,6 +8,11 @@ module.exports = {
   description: "Set time bubbled for MAD bank.",
   syntax: `${config.PREFIX1}set-time-mad`,
   execute(message) {
+    // Lazy to remove file, added config to disable command on being called
+    if (!config.AVAILABLE) {
+      return false;
+    }
+
     const truceValue = message.content.split(" ")[1];
 
     if (!truceValue) {
