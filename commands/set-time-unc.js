@@ -8,6 +8,11 @@ module.exports = {
   description: "Set time bubbled for UNC bank.",
   syntax: `${config.PREFIX1}set-time-unc`,
   execute(message) {
+    // Lazy to remove file, added config to disable command on being called
+    if (!config.AVAILABLE) {
+      return false;
+    }
+
     const truceValue = message.content.split(" ")[1];
 
     if (!truceValue) {
