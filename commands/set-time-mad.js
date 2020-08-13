@@ -21,25 +21,18 @@ module.exports = {
     }
 
     const prepBubbleTime = (truceValue) => {
-      // const acceptableTruceValue = ["4h", "8h", "1d", "3d", "7d", "14d"];
-
-      // if (!acceptableTruceValue.find((el) => el == truceValue)) {
-      //   message.channel.send("Wrong input. Please try again.");
-      //   return false;
-      // }
-
       truceValue = truceValue.split("");
       const timeForm = truceValue.pop();
       const duration = truceValue.join("");
       const d = new Date();
 
+      if (Number.isInteger(Number(timeForm))) {
+        return false;
+      }
+
       switch (timeForm) {
         case "h":
           d.setHours(d.getHours() + Number(duration));
-          break;
-
-        case "d":
-          d.setDate(d.getDate() + Number(duration));
           break;
       }
 
@@ -50,19 +43,25 @@ module.exports = {
     };
 
     const fileName = "./data/time-store.json";
-    readJson(fileName).then((data) => {
-      // Set transport amount
-      data["MAD-BANK"] = prepBubbleTime(truceValue);
-      data["MAD-CHECK"] = false;
+    const datetime = prepBubbleTime(truceValue);
+    if (datetime) {
+      readJson(fileName).then((data) => {
+        // Set transport amount
 
-      writeJson(fileName, data).then((data) => {
-        if (data == "File update success!") {
-          message.channel.send(
-            "Bubbled time value for MAD bank is updated! Thank you."
-          );
-          return false;
-        }
+        data["MAD-BANK"] = prepBubbleTime(truceValue);
+        data["MAD-CHECK"] = false;
+
+        writeJson(fileName, data).then((data) => {
+          if (data == "File update success!") {
+            message.channel.send(
+              "Bubbled time value for MAD bank is updated! Thank you."
+            );
+            return false;
+          }
+        });
       });
-    });
+    } else {
+      message.channel.send("Please input the correct format. Thank you.");
+    }
   },
 };
