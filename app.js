@@ -3,8 +3,8 @@ const Discord = require("discord.js");
 const config = require("./common/getConfig")();
 const settings = require("./settings.json");
 const client = new Discord.Client();
+const { GoogleSpreadsheet } = require("google-spreadsheet");
 const { commandHandler } = require("./common/trackingSystem");
-const { readJson, writeJson } = require("./common/utilities");
 
 client.commands = new Discord.Collection();
 const commandFiles = fs
@@ -45,10 +45,9 @@ client.once("ready", () => {
       currentDateTime,
       client,
       channelId,
-      bankType,
-      fileName,
-      fileData
+      bankType
     ) => {
+      check = check == "FALSE" ? false : true;
       if (duration && !check) {
         duration = getDateDurations(duration);
         // For checking time logs
@@ -60,38 +59,55 @@ client.once("ready", () => {
           new Date(currentDateTime) >= new Date(duration[0]) &&
           new Date(currentDateTime) <= new Date(duration[1])
         ) {
+          let checkType;
           if (bankType == "MAD") {
-            fileData["MAD-CHECK"] = true;
+            checkType = "B5";
           } else {
-            fileData["UNC-CHECK"] = true;
+            checkType = "B4";
           }
-          writeJson(fileName, fileData).then((data) => {
-            if (data == "File update success!") {
-              client.channels.cache
-                .get(channelId)
-                .send(
-                  `@here ${
-                    bankType == "MAD" ? "MAD" : "UNC"
-                  } bank bubble is going to expire in less than 3 hours. Please apply new bubble asap!`
-                );
-            }
-          });
+          (async () => {
+            const doc = new GoogleSpreadsheet(config.TIME_STORE_SPREADSHEET_ID);
+            await doc.useServiceAccountAuth({
+              client_email: config.GOOGLE_SERVICE_ACCOUNT_EMAIL,
+              private_key: config.GOOGLE_PRIVATE_KEY,
+            });
+            await doc.loadInfo();
+            const sheet = doc.sheetsByIndex[0];
+            await sheet.loadCells("A1:B5");
+            const checkCell = sheet.getCellByA1(checkType);
+            checkCell.value = "TRUE";
+            await sheet.saveUpdatedCells();
+            client.channels.cache
+              .get(channelId)
+              .send(
+                `@here ${
+                  bankType == "MAD" ? "MAD" : "UNC"
+                } bank bubble is going to expire in less than 3 hours. Please apply new bubble asap!`
+              );
+          })();
         }
       }
     };
-
     setInterval(() => {
-      const d = new Date();
-      const date = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
-      const time = `${d.getHours()}:${d.getMinutes()}`;
-      const currentDateTime = date + " " + time;
+      (async () => {
+        const doc = new GoogleSpreadsheet(config.TIME_STORE_SPREADSHEET_ID);
+        await doc.useServiceAccountAuth({
+          client_email: config.GOOGLE_SERVICE_ACCOUNT_EMAIL,
+          private_key: config.GOOGLE_PRIVATE_KEY,
+        });
+        await doc.loadInfo();
+        const sheet = doc.sheetsByIndex[0];
+        await sheet.loadCells("A1:B5");
 
-      const fileName = "./data/time-store.json";
-      readJson(fileName).then((data) => {
-        let MAD_DURATION = data["MAD-BANK"];
-        let UNC_DURATION = data["UNC-BANK"];
-        const MAD_CHECK = data["MAD-CHECK"];
-        const UNC_CHECK = data["UNC-CHECK"];
+        const d = new Date();
+        const date = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+        const time = `${d.getHours()}:${d.getMinutes()}`;
+        const currentDateTime = date + " " + time;
+
+        const UNC_DURATION = sheet.getCellByA1("B2").value;
+        const MAD_DURATION = sheet.getCellByA1("B3").value;
+        const UNC_CHECK = sheet.getCellByA1("B4").value;
+        const MAD_CHECK = sheet.getCellByA1("B5").value;
 
         checkIfTimeNearEnd(
           MAD_DURATION,
@@ -99,9 +115,7 @@ client.once("ready", () => {
           currentDateTime,
           client,
           channelId,
-          "MAD",
-          fileName,
-          data
+          "MAD"
         );
 
         checkIfTimeNearEnd(
@@ -110,15 +124,12 @@ client.once("ready", () => {
           currentDateTime,
           client,
           channelId,
-          "UNC",
-          fileName,
-          data
+          "UNC"
         );
-      });
-
+      })();
       // Checks if function setInterval is working
       console.log("Bubble bot is running");
-    }, 10000);
+    }, 60000);
   }
 });
 
@@ -206,7 +217,6 @@ client.on("message", (message) => {
       ];
 
       if (titleCommands.includes(roleLowerCased)) {
-        console.log([client.commands, roleLowerCased]);
         client.commands.get(roleLowerCased).execute(message);
         return true;
       } else {

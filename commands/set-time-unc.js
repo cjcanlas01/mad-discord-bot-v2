@@ -1,7 +1,7 @@
 /**
  */
 const config = require("../common/getConfig")();
-const { readJson, writeJson } = require("../common/utilities");
+const { getSetCallData } = require("../common/trackingSystem");
 
 module.exports = {
   name: "set-time-unc",
@@ -42,22 +42,23 @@ module.exports = {
       return date + " " + time;
     };
 
-    const fileName = "./data/time-store.json";
     const datetime = prepBubbleTime(truceValue);
     if (datetime) {
-      readJson(fileName).then((data) => {
-        // Set transport amount
-        data["UNC-BANK"] = prepBubbleTime(truceValue);
-        data["UNC-CHECK"] = false;
-
-        writeJson(fileName, data).then((data) => {
-          if (data == "File update success!") {
-            message.channel.send(
-              "Bubbled time value for UNC bank is updated! Thank you."
-            );
-            return false;
-          }
-        });
+      getSetCallData(
+        "UNC_BANK",
+        datetime,
+        "SET",
+        true,
+        "UNC_CHECK",
+        "FALSE"
+      ).then((isTrue) => {
+        if (isTrue) {
+          message.channel.send(
+            "Bubbled time value for MAD bank is updated! Thank you."
+          );
+        } else {
+          message.channel.send("Please input the correct format. Thank you.");
+        }
       });
     } else {
       message.channel.send("Please input the correct format. Thank you.");

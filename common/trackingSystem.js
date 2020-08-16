@@ -253,6 +253,50 @@ const getCurrentPO = (message) => {
   return poData;
 };
 
+const getSetCallData = async (
+  bankType,
+  value,
+  functionType,
+  setTimeAndCheck,
+  checkType,
+  checker
+) => {
+  const doc = new GoogleSpreadsheet(config.TIME_STORE_SPREADSHEET_ID);
+  await doc.useServiceAccountAuth({
+    client_email: config.GOOGLE_SERVICE_ACCOUNT_EMAIL,
+    private_key: config.GOOGLE_PRIVATE_KEY,
+  });
+  const coords = {
+    UNC_BANK: "B2",
+    MAD_BANK: "B3",
+    UNC_CHECK: "B4",
+    MAD_CHECK: "B5",
+  };
+  await doc.loadInfo();
+  const sheet = doc.sheetsByIndex[0];
+  await sheet.loadCells("A1:B5");
+  const dateTimeCell = sheet.getCellByA1(coords[bankType]);
+
+  switch (functionType) {
+    case "GET":
+      return dateTimeCell.value;
+    case "SET":
+      if (!value) {
+        return false;
+      }
+      const checkCell = sheet.getCellByA1(coords[checkType]);
+
+      if (!setTimeAndCheck) {
+        dateTimeCell.value = value;
+      } else {
+        dateTimeCell.value = value;
+        checkCell.value = checker;
+      }
+      await sheet.saveUpdatedCells();
+      return true;
+  }
+};
+
 module.exports = {
   commandHandler,
   prepTrackData,
@@ -261,4 +305,5 @@ module.exports = {
   getRoleObj,
   addOrRemoveRole,
   getCurrentPO,
+  getSetCallData,
 };

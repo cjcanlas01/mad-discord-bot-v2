@@ -1,7 +1,7 @@
 /**
  */
 const config = require("../common/getConfig")();
-const { readJson, writeJson } = require("../common/utilities");
+const { getSetCallData } = require("../common/trackingSystem");
 
 module.exports = {
   name: "set-time-mad",
@@ -42,23 +42,23 @@ module.exports = {
       return date + " " + time;
     };
 
-    const fileName = "./data/time-store.json";
     const datetime = prepBubbleTime(truceValue);
     if (datetime) {
-      readJson(fileName).then((data) => {
-        // Set transport amount
-
-        data["MAD-BANK"] = prepBubbleTime(truceValue);
-        data["MAD-CHECK"] = false;
-
-        writeJson(fileName, data).then((data) => {
-          if (data == "File update success!") {
-            message.channel.send(
-              "Bubbled time value for MAD bank is updated! Thank you."
-            );
-            return false;
-          }
-        });
+      getSetCallData(
+        "MAD_BANK",
+        datetime,
+        "SET",
+        true,
+        "MAD_CHECK",
+        "FALSE"
+      ).then((isTrue) => {
+        if (isTrue) {
+          message.channel.send(
+            "Bubbled time value for MAD bank is updated! Thank you."
+          );
+        } else {
+          message.channel.send("Please input the correct format. Thank you.");
+        }
       });
     } else {
       message.channel.send("Please input the correct format. Thank you.");
