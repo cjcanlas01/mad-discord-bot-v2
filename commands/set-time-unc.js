@@ -54,7 +54,7 @@ module.exports = {
       ).then((isTrue) => {
         if (isTrue) {
           message.channel.send(
-            "Bubbled time value for MAD bank is updated! Thank you."
+            "Bubbled time value for UNC bank is updated! Thank you."
           );
         } else {
           message.channel.send("Please input the correct format. Thank you.");
