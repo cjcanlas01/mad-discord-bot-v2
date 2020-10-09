@@ -5,15 +5,15 @@ const embed = require("../common/discordEmbed");
 const config = require("../common/getConfig")();
 
 module.exports = {
-  name: "po",
-  description: "Show PO-related commands.",
-  syntax: `${config.PREFIX1}po`,
+  name: "srhhelp",
+  description: "Show available commands of SRH bot.",
+  syntax: `${config.PREFIX1}srhhelp`,
   includes: true,
   execute(message) {
     const { commands } = message.client;
     const json = commands
       .filter((val) => {
-        if (val["po"]) {
+        if (val["includes"]) {
           return val;
         }
       })
@@ -24,12 +24,6 @@ module.exports = {
         };
       });
 
-    message.author.send(
-      embed(
-        json,
-        "PO Commands!",
-        "MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD!"
-      )
-    );
+    message.author.send(embed(json));
   },
 };

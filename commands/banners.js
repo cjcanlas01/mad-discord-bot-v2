@@ -24,12 +24,6 @@ module.exports = {
         };
       });
 
-    message.author.send(
-      embed(
-        json,
-        "Banner Commands!",
-        "MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD!"
-      )
-    );
+    message.author.send(embed(json, "Banner Commands!"));
   },
 };
