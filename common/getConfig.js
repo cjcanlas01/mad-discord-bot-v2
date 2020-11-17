@@ -2,7 +2,7 @@ require("dotenv").config();
 
 module.exports = function getConfig() {
   return {
-    PREFIX1: process.env.PREFIX1 || "!",
+    PREFIX: process.env.PREFIX || "|",
     TOKEN: process.env.BOT_TOKEN,
   };
 };

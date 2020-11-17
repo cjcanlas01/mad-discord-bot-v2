@@ -1,14 +1,11 @@
-/**
- * Displays all commands of discord MAD bot
- */
-const embed = require("../common/discordEmbed");
 const config = require("../common/getConfig")();
+const embed = require("../common/discordEmbed");
 
 module.exports = {
-  name: "srhhelp",
-  description: "Show available commands of SRH bot.",
-  syntax: `${config.PREFIX1}srhhelp`,
-  includes: true,
+  name: "help",
+  description: "Display some bot info.",
+  syntax: `${config.PREFIX}help`,
+  includes: false,
   execute(message) {
     const { commands } = message.client;
     const json = commands

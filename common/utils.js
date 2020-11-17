@@ -1,5 +1,5 @@
 /**
- * Function to read commands only available with prefix "!"
+ * Function to read commands only available with prefix
  *
  * @param client | discord object
  * @param message | discord object
@@ -14,7 +14,7 @@ const commandHandler = (client, message, prefix) => {
   const args = message.content.slice(prefix.length).split(/ +/);
   const command = args.shift().toLowerCase();
   // List of available commands to prefix "!"
-  const acceptableCommands = ["purge"];
+  const acceptableCommands = ["help", "purge"];
 
   if (!client.commands.has(command) || !acceptableCommands.includes(command))
     return;

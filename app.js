@@ -2,7 +2,7 @@ const fs = require("fs");
 const Discord = require("discord.js");
 const config = require("./common/getConfig")();
 const client = new Discord.Client();
-const { commandHandler } = require("./common/trackingSystem");
+const { commandHandler } = require("./common/utils");
 
 client.commands = new Discord.Collection();
 const commandFiles = fs
@@ -11,7 +11,7 @@ const commandFiles = fs
 
 client.once("ready", () => {
   console.log("Ready!");
-  client.user.setActivity(`${config.PREFIX1}srhhelp`, { type: "LISTENING" });
+  client.user.setActivity(`${config.PREFIX}help`, { type: "LISTENING" });
 });
 
 for (const file of commandFiles) {
@@ -20,11 +20,11 @@ for (const file of commandFiles) {
 }
 
 client.on("message", (message) => {
-  const PREFIX1 = config.PREFIX1;
+  const PREFIX = config.PREFIX;
 
   // For commands that starts with prefix
-  if (message.content.startsWith(PREFIX1)) {
-    commandHandler(client, message, PREFIX1);
+  if (message.content.startsWith(PREFIX)) {
+    commandHandler(client, message, PREFIX);
     return;
   }
 });

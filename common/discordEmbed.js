@@ -6,10 +6,10 @@
 const Discord = require("discord.js");
 
 module.exports = discordEmbed = (fields, title = null, footer = null) => {
-  const setTitle = title ? title : "SRH is here! How can I help?";
+  const setTitle = title ? title : "FaeBot";
   const setFooter = footer
     ? footer
-    : "SRH! SRH! SRH! SRH! SRH! SRH! SRH! SRH! SRH! SRH! SRH! SRH! SRH! SRH!";
+    : "FAE! FAE! FAE! FAE! FAE! FAE! FAE! FAE! FAE! FAE! FAE! FAE! FAE! FAE!";
   return new Discord.MessageEmbed()
     .setTitle(setTitle)
     .setColor(0xff0000)

@@ -1,4 +1,4 @@
 {
   "verbose": true,
-  "ignore": ["data/*", "settings.json"]
+  "ignore": [""]
 }
