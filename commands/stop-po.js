@@ -48,7 +48,7 @@ module.exports = {
           "The Protocole officer is leaving, the buffs will not be available until another one take the role. Thank you !"
         );
         message.channel.send(
-          "https://static.wixstatic.com/media/3bd738_28c4b141811146a9b8d86c05d224b079~mv2.jpg/v1/fill/w_569,h_427,al_c,q_80/madclosed_copy.webp"
+          "https://cdn.discordapp.com/attachments/689325404280193094/781511106409267220/Sorry-We-Are-Closed-Yard-Sign.jpg"
         );
 
         // Clean queue

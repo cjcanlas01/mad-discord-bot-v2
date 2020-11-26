@@ -5,9 +5,9 @@ const embed = require("../common/discordEmbed");
 const config = require("../common/getConfig")();
 
 module.exports = {
-  name: "madhelp",
-  description: "Show available commands of MAD bot.",
-  syntax: `${config.PREFIX1}madhelp`,
+  name: "faehelp",
+  description: "Show available commands of FAE bot.",
+  syntax: `${config.PREFIX1}faehelp`,
   includes: true,
   execute(message) {
     const { commands } = message.client;
@@ -24,12 +24,6 @@ module.exports = {
         };
       });
 
-    message.author.send(
-      embed(
-        json,
-        null,
-        "MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD!"
-      )
-    );
+    message.author.send(embed(json));
   },
 };

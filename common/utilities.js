@@ -62,10 +62,8 @@ const displayQueue = (message) => {
     .then((msg) => {
       readJson("/data/queue.json")
         .then((json) => {
-          const title = "**K40 Title Queue**";
-          const footer =
-            "MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD!";
-          channel.send(embed(json, title, footer));
+          const title = "**K53 Title Queue**";
+          channel.send(embed(json, title));
         })
         .catch((err) => {
           throw new Error(err);

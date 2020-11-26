@@ -1,11 +1,10 @@
 {
-  "PO_ACCESS_ROLE": "poaccess",
+  "PO_ACCESS_ROLE": "PO",
   "PO_ROLE": "Protocol Officer",
-  "BANK_ROLE": "Bank",
-  "QUEUE_CHANNEL": "title-queue",
+  "QUEUE_CHANNEL": "buff-title-queue",
   "BUFF_CHANNEL": "buff-requests",
   "INTRODUCTION_CHANNEL": "welcome",
   "TRANSPORT_TAX": "7.2",
   "MAX_TRANSPORT_AMOUNT": "4160000",
-  "MANAGEMENT_CHANNEL": "bigmad-channel"
+  "MANAGEMENT_CHANNEL": "chamber-room"
 }

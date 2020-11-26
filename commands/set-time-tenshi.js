@@ -4,9 +4,9 @@ const config = require("../common/getConfig")();
 const { getSetCallData } = require("../common/trackingSystem");
 
 module.exports = {
-  name: "set-time-mad",
-  description: "Set time bubbled for MAD bank.",
-  syntax: `${config.PREFIX1}set-time-mad`,
+  name: "set-time-tenshi",
+  description: "Set time bubbled for Tenshi.",
+  syntax: `${config.PREFIX1}set-time-tenshi`,
   execute(message) {
     // Lazy to remove file, added config to disable command on being called
     if (!config.AVAILABLE) {
@@ -45,16 +45,16 @@ module.exports = {
     const datetime = prepBubbleTime(truceValue);
     if (datetime) {
       getSetCallData(
-        "MAD_BANK",
+        "UNC_BANK",
         datetime,
         "SET",
         true,
-        "MAD_CHECK",
+        "UNC_CHECK",
         "FALSE"
       ).then((isTrue) => {
         if (isTrue) {
           message.channel.send(
-            "Bubbled time value for MAD bank is updated! Thank you."
+            "Bubbled time value for Tenshi is updated! Thank you."
           );
         } else {
           message.channel.send("Please input the correct format. Thank you.");

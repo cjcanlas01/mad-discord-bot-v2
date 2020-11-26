@@ -13,7 +13,7 @@ const commandFiles = fs
 
 client.once("ready", () => {
   console.log("Ready!");
-  client.user.setActivity(`${config.PREFIX1}madhelp`, { type: "LISTENING" });
+  client.user.setActivity(`${config.PREFIX1}faehelp`, { type: "LISTENING" });
 
   if (config.AVAILABLE) {
     let channelId = client.channels.cache.find(
@@ -81,7 +81,7 @@ client.once("ready", () => {
               .get(channelId)
               .send(
                 `@here ${
-                  bankType == "MAD" ? "MAD" : "UNC"
+                  bankType == "BANK" ? "BANK" : "TENSHI"
                 } bank bubble is going to expire in less than 3 hours. Please apply new bubble asap!`
               );
           })();
@@ -104,27 +104,27 @@ client.once("ready", () => {
         const time = `${d.getHours()}:${d.getMinutes()}`;
         const currentDateTime = date + " " + time;
 
-        const UNC_DURATION = sheet.getCellByA1("B2").value;
-        const MAD_DURATION = sheet.getCellByA1("B3").value;
-        const UNC_CHECK = sheet.getCellByA1("B4").value;
-        const MAD_CHECK = sheet.getCellByA1("B5").value;
+        const TENSHI_DURATION = sheet.getCellByA1("B2").value;
+        const BANK_DURATION = sheet.getCellByA1("B3").value;
+        const TENSHI_CHECK = sheet.getCellByA1("B4").value;
+        const BANK_CHECK = sheet.getCellByA1("B5").value;
 
         checkIfTimeNearEnd(
-          MAD_DURATION,
-          MAD_CHECK,
+          BANK_DURATION,
+          BANK_CHECK,
           currentDateTime,
           client,
           channelId,
-          "MAD"
+          "BANK"
         );
 
         checkIfTimeNearEnd(
-          UNC_DURATION,
-          UNC_CHECK,
+          TENSHI_DURATION,
+          TENSHI_CHECK,
           currentDateTime,
           client,
           channelId,
-          "UNC"
+          "TENSHI"
         );
       })();
       // Checks if function setInterval is working
@@ -133,16 +133,28 @@ client.once("ready", () => {
   }
 });
 
-if (settings.INTRODUCTION_CHANNEL) {
-  client.on("guildMemberAdd", (member) => {
-    const channel = member.guild.channels.cache.find(
-      (ch) => ch.name === settings.INTRODUCTION_CHANNEL
+client.on("guildMemberAdd", (member) => {
+  let channel;
+  if (member.guild.name == "Official K53 Discord") {
+    channel = member.guild.channels.cache.find(
+      (ch) => ch.name == "landing-page"
     );
+    const rulesChannel = member.guild.channels.cache.find(channel => channel.name == 'old-kingdom-rules');
     channel.send(
-      `Hey ${member.toString()}, welcome to K40 Discord :tada::hugging: ! Please change your name to the character in game with your Alliance tag in front. Example : [ABC] JohnDoe`
+      `Welcome, ${member.toString()}! \n\n Please head over to <#${rulesChannel.id}>) to read them thoroughly. After you're done reading, change your Discord name to match your current alliance tag and in-game name. Thanks! :hibiscus:`
     );
-  });
-}
+  }
+
+  if (member.guild.name == "ISY - Imperial Syndicate") {
+    channel = member.guild.channels.cache.find(
+      (ch) => ch.name == "welcome-page"
+    );
+    const kingdomRulesChannel = member.guild.channels.cache.find(channel => channel.name == 'rules');
+    channel.send(
+      `Welcome, ${member.toString()}! \n\n Please head over to <#${kingdomRulesChannel.id}>) to read them thoroughly. After you're done reading, change your Discord name to match your current alliance tag and in-game name. Thanks! :hibiscus:`
+    );
+  }
+});
 
 for (const file of commandFiles) {
   const command = require(`./commands/${file}`);

@@ -4,9 +4,9 @@ const config = require("../common/getConfig")();
 const { getSetCallData } = require("../common/trackingSystem");
 
 module.exports = {
-  name: "set-time-unc",
-  description: "Set time bubbled for UNC bank.",
-  syntax: `${config.PREFIX1}set-time-unc`,
+  name: "set-time-bank",
+  description: "Set time bubbled for bank.",
+  syntax: `${config.PREFIX1}set-time-bank`,
   execute(message) {
     // Lazy to remove file, added config to disable command on being called
     if (!config.AVAILABLE) {
@@ -45,16 +45,16 @@ module.exports = {
     const datetime = prepBubbleTime(truceValue);
     if (datetime) {
       getSetCallData(
-        "UNC_BANK",
+        "MAD_BANK",
         datetime,
         "SET",
         true,
-        "UNC_CHECK",
+        "MAD_CHECK",
         "FALSE"
       ).then((isTrue) => {
         if (isTrue) {
           message.channel.send(
-            "Bubbled time value for UNC bank is updated! Thank you."
+            "Bubbled time value for bank is updated! Thank you."
           );
         } else {
           message.channel.send("Please input the correct format. Thank you.");

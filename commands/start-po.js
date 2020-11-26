@@ -40,7 +40,7 @@ module.exports = {
         "NOW! A new protocole officer is here to give buffs. Thank you for your time generous PO !"
       );
       message.channel.send(
-        "https://static.wixstatic.com/media/3bd738_680cb14b338044b69d4ebfa7f451010e~mv2.jpg/v1/fill/w_569,h_427,al_c,q_80/madopen_copy.webp"
+        "https://cdn.discordapp.com/attachments/689325404280193094/781511105011777536/Come-In-We-Are-Open-GW-Yard-Sign.jpg"
       );
     }
   },

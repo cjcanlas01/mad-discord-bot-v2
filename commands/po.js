@@ -24,12 +24,6 @@ module.exports = {
         };
       });
 
-    message.author.send(
-      embed(
-        json,
-        "PO Commands!",
-        "MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD!"
-      )
-    );
+    message.author.send(embed(json, "PO Commands!"));
   },
 };

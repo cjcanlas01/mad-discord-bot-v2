@@ -1,5 +1,5 @@
 /**
- * Displays all commands of discord MAD bot
+ * Displays all commands of discord FAE bot
  */
 const embed = require("../common/discordEmbed");
 const config = require("../common/getConfig")();
@@ -24,12 +24,6 @@ module.exports = {
         };
       });
 
-    message.author.send(
-      embed(
-        json,
-        "Banner Commands!",
-        "MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD!"
-      )
-    );
+    message.author.send(embed(json, "Banner Commands!"));
   },
 };
