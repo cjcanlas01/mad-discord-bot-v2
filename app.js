@@ -60,7 +60,7 @@ client.once("ready", () => {
           new Date(currentDateTime) <= new Date(duration[1])
         ) {
           let checkType;
-          if (bankType == "MAD") {
+          if (bankType == "BANK") {
             checkType = "B5";
           } else {
             checkType = "B4";
@@ -135,7 +135,7 @@ client.once("ready", () => {
 
 client.on("guildMemberAdd", (member) => {
   /**
-   * Welcome message container for servers, based on given identification tag <look in settings.json for server tags>
+   * Welcome message container for servers, based on given identification tag (look in settings.json for server tags)
    */
   const welcomeMsg = {
     ISY: function(name, rulesChannel) {

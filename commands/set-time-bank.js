@@ -45,11 +45,11 @@ module.exports = {
     const datetime = prepBubbleTime(truceValue);
     if (datetime) {
       getSetCallData(
-        "MAD_BANK",
+        "BANK",
         datetime,
         "SET",
         true,
-        "MAD_CHECK",
+        "BANK_CHECK",
         "FALSE"
       ).then((isTrue) => {
         if (isTrue) {
