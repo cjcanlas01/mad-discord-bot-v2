@@ -3,8 +3,21 @@
   "PO_ROLE": "Protocol Officer",
   "QUEUE_CHANNEL": "buff-title-queue",
   "BUFF_CHANNEL": "buff-requests",
-  "INTRODUCTION_CHANNEL": "welcome",
   "TRANSPORT_TAX": "7.2",
   "MAX_TRANSPORT_AMOUNT": "4160000",
-  "MANAGEMENT_CHANNEL": "chamber-room"
+  "MANAGEMENT_CHANNEL": "chamber-room",
+  "WELCOME_CHANNEL": {
+    "Official K53 Discord": {
+      "tag": "K53",
+      "name": "Official K53 Discord",
+      "welcomeChannel": "welcome-page",
+      "rulesChannel": "kingdom-rules"
+    },
+    "ISY - Imperial Syndicate": {
+      "tag": "ISY",
+      "name": "ISY - Imperial Syndicate",
+      "welcomeChannel": "landing-page",
+      "rulesChannel": "rules"
+    }
+  }
 }

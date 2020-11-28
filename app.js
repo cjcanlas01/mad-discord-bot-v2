@@ -134,26 +134,27 @@ client.once("ready", () => {
 });
 
 client.on("guildMemberAdd", (member) => {
-  let channel;
-  if (member.guild.name == "Official K53 Discord") {
-    channel = member.guild.channels.cache.find(
-      (ch) => ch.name == "landing-page"
-    );
-    const rulesChannel = member.guild.channels.cache.find(channel => channel.name == 'old-kingdom-rules');
-    channel.send(
-      `Welcome, ${member.toString()}! \n\n Please head over to <#${rulesChannel.id}>) to read them thoroughly. After you're done reading, change your Discord name to match your current alliance tag and in-game name. Thanks! :hibiscus:`
-    );
+  /**
+   * Welcome message container for servers, based on given identification tag <look in settings.json for server tags>
+   */
+  const welcomeMsg = {
+    ISY: function(name, rulesChannel) {
+      return `Welcome, ${name}! \n\nPlease head over to <#${rulesChannel.id}> to read them thoroughly. After you're done reading, change your Discord name to match your in-game name. Thanks! :hibiscus:`;
+    },
+    K53: function(name, rulesChannel) {
+      return `Welcome, ${name}! \n\nPlease head over to <#${rulesChannel.id}> to read them thoroughly. After you're done reading, change your Discord name to match your current alliance tag and in-game name. Thanks! :hibiscus:`;
+    }
   }
 
-  if (member.guild.name == "ISY - Imperial Syndicate") {
-    channel = member.guild.channels.cache.find(
-      (ch) => ch.name == "welcome-page"
-    );
-    const kingdomRulesChannel = member.guild.channels.cache.find(channel => channel.name == 'rules');
-    channel.send(
-      `Welcome, ${member.toString()}! \n\n Please head over to <#${kingdomRulesChannel.id}>) to read them thoroughly. After you're done reading, change your Discord name to match your current alliance tag and in-game name. Thanks! :hibiscus:`
-    );
-  }
+  const channelDetail = settings.WELCOME_CHANNEL[member.guild.name];
+  const welcomeChannel = member.guild.channels.cache.find(
+    (ch) => ch.name == channelDetail.welcomeChannel
+  );
+  const rulesChannel = member.guild.channels.cache.find(
+    (ch) => ch.name == channelDetail.rulesChannel
+  );
+
+  welcomeChannel.send(welcomeMsg[channelDetail.tag](member.toString(), rulesChannel));
 });
 
 for (const file of commandFiles) {
