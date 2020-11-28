@@ -259,10 +259,10 @@ const getSetCallData = async (
     private_key: config.GOOGLE_PRIVATE_KEY,
   });
   const coords = {
-    UNC_BANK: "B2",
-    MAD_BANK: "B3",
-    UNC_CHECK: "B4",
-    MAD_CHECK: "B5",
+    TENSHI_BANK: "B2",
+    BANK: "B3",
+    TENSHI_CHECK: "B4",
+    BANK_CHECK: "B5",
   };
   await doc.loadInfo();
   const sheet = doc.sheetsByIndex[0];
