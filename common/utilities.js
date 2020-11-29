@@ -283,6 +283,11 @@ const hasPoAccessRole = (message) => {
   return false;
 };
 
+/**
+ * Find discord channel object
+ * @param channelName | string
+ * @return discord channel object
+ */
 const findChannelByName = (message, channelName) => {
   return message.guild.channels.cache.find((ch) => ch.name == channelName);
 };

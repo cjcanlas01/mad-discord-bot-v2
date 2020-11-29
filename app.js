@@ -5,6 +5,7 @@ const settings = require("./settings.json");
 const client = new Discord.Client();
 const { GoogleSpreadsheet } = require("google-spreadsheet");
 const { commandHandler } = require("./common/trackingSystem");
+const bootstrapWelcome = require("./bootstrap/welcome");
 
 client.commands = new Discord.Collection();
 const commandFiles = fs
@@ -14,6 +15,8 @@ const commandFiles = fs
 client.once("ready", () => {
   console.log("Ready!");
   client.user.setActivity(`${config.PREFIX1}madhelp`, { type: "LISTENING" });
+
+  bootstrapWelcome(client);
 
   if (config.AVAILABLE) {
     let channelId = client.channels.cache.find(
