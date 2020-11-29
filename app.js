@@ -133,17 +133,6 @@ client.once("ready", () => {
   }
 });
 
-if (settings.INTRODUCTION_CHANNEL) {
-  client.on("guildMemberAdd", (member) => {
-    const channel = member.guild.channels.cache.find(
-      (ch) => ch.name === settings.INTRODUCTION_CHANNEL
-    );
-    channel.send(
-      `Hey ${member.toString()}, welcome to K40 Discord :tada::hugging: ! Please change your name to the character in game with your Alliance tag in front. Example : [ABC] JohnDoe`
-    );
-  });
-}
-
 for (const file of commandFiles) {
   const command = require(`./commands/${file}`);
   client.commands.set(command.name, command);

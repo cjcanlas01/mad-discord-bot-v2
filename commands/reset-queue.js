@@ -1,4 +1,8 @@
-const { writeJson, displayQueue, hasPoAccess } = require("../common/utilities");
+const {
+  writeJson,
+  displayQueue,
+  hasPoAccessRole,
+} = require("../common/utilities");
 const { msgPoHasNoAccess } = require("../common/messages");
 const config = require("../common/getConfig")();
 
@@ -9,7 +13,7 @@ module.exports = {
   po: true,
   execute(message) {
     // Check if user has proper role for access
-    if (!hasPoAccess(message)) {
+    if (!hasPoAccessRole(message)) {
       msgPoHasNoAccess(message);
       return false;
     }

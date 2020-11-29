@@ -1,4 +1,4 @@
-module.exports = function getSettings() {
+const getSettings = () => {
   return {
     /**
      * Discord server role used by bot to indicate if person has access to Protocol Officer
@@ -57,3 +57,7 @@ module.exports = function getSettings() {
     },
   };
 };
+
+module.exports = {
+  getSettings
+}

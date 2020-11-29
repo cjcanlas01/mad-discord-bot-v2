@@ -271,7 +271,7 @@ const removeNameInQueue = (message, user) => {
     });
 };
 
-const hasPoAccess = (message) => {
+const hasPoAccessRole = (message) => {
   if (
     message.member.roles.cache.find(
       (role) => role.name === settings.PO_ACCESS_ROLE
@@ -283,6 +283,10 @@ const hasPoAccess = (message) => {
   return false;
 };
 
+const findChannelByName = (message, channelName) => {
+  return message.guild.channels.cache.find((ch) => ch.name == channelName);
+};
+
 module.exports = {
   readJson,
   writeJson,
@@ -291,5 +295,6 @@ module.exports = {
   displayQueue,
   removeNameInQueue,
   getUser,
-  hasPoAccess,
+  hasPoAccessRole,
+  findChannelByName,
 };

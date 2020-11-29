@@ -3,7 +3,7 @@
  */
 const {
   removeNameInQueue,
-  hasPoAccess,
+  hasPoAccessRole,
   getUser,
 } = require("../common/utilities");
 const { msgPoHasNoAccess } = require("../common/messages");
@@ -22,7 +22,7 @@ module.exports = {
     }
 
     // Check if user has proper role for access
-    if (!hasPoAccess(message)) {
+    if (!hasPoAccessRole(message)) {
       msgPoHasNoAccess(message);
       return false;
     }
