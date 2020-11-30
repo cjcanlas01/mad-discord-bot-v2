@@ -46,18 +46,33 @@ const getSettings = () => {
         tag: "K31",
         name: "Official K53 Discord",
         welcomeChannel: "welcome",
-        rulesChannel: ""
+        rulesChannel: "",
       },
       "MAD - Mass Destruction": {
         tag: "MAD",
         name: "MAD - Mass Destruction",
         welcomeChannel: "welcome",
-        rulesChannel: ""
-      }
+        rulesChannel: "",
+      },
+    },
+    BUBBLE: {
+      guild: "Dominator's Touch",
+      channel: "bigmad-channel",
+      cellsCovered: "A1:C3",
+      TIME_STORE: [
+        {
+          name: "BBLUVSYOU",
+          durationAndRenewedCell: ["B2", "C2"],
+        },
+        {
+          name: "IRONBANK",
+          durationAndRenewedCell: ["B3", "C3"],
+        },
+      ],
     },
   };
 };
 
 module.exports = {
-  getSettings
-}
+  getSettings,
+};

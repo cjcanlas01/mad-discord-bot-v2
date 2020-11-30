@@ -1,5 +1,6 @@
-const settings = require("../config/settings")();
+const { getSettings } = require("../config/settings");
 const { findChannelByName } = require("../common/utilities");
+const settings = getSettings();
 
 module.exports = bootstrapWelcome = (client) => {
   client.on("guildMemberAdd", (member) => {
