@@ -68,7 +68,15 @@ const getDurationBetweenTwoDates = (dateTime) => {
  * - sheet: established google spreadsheet
  */
 const checkTimeStoreForExpiration = async (o) => {
-  if (!o.isRenewed) {
+  /**
+   * Constants for boolean values
+   * identified as strings
+   */
+  const t = {
+    FALSE: false,
+    TRUE: true,
+  };
+  if (!t[o.isRenewed]) {
     const durationBetween = getDurationBetweenTwoDates(o.duration);
     if (
       new Date(dateTimeNow()) >= new Date(durationBetween[0]) &&
@@ -83,7 +91,7 @@ const checkTimeStoreForExpiration = async (o) => {
   }
 };
 
-module.exports = bootstrapBubble = async (client) => {
+const bootstrapBubble = async (client) => {
   console.log("Bubble bot is running...");
   const bubbleDetail = settings.BUBBLE;
   // Find specified guild for bubble feature
@@ -116,4 +124,10 @@ module.exports = bootstrapBubble = async (client) => {
       sheet: sheet,
     });
   }
+};
+
+module.exports = {
+  bootstrapBubble,
+  getSheetCellVal,
+  initGoogleSpreadsheetConnection,
 };

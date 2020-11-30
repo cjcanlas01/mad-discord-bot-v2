@@ -58,6 +58,7 @@ const commandHandler = (client, message, prefix) => {
     "set-time-unc",
     "set-time-mad",
     "tealc",
+    "set-time",
   ];
 
   const sillyCommands = require("../common/getSillyMessages")();

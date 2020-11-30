@@ -5,7 +5,7 @@ const settings = require("./settings.json");
 const client = new Discord.Client();
 const { commandHandler } = require("./common/trackingSystem");
 const bootstrapWelcome = require("./bootstrap/welcome");
-const bootstrapBubble = require("./bootstrap/bubble");
+const { bootstrapBubble } = require("./bootstrap/bubble");
 
 client.commands = new Discord.Collection();
 const commandFiles = fs

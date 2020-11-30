@@ -70,6 +70,9 @@ const getSettings = () => {
         },
       ],
     },
+    ACTIVATE: {
+      BUBBLE_REMINDER: true,
+    },
   };
 };
 

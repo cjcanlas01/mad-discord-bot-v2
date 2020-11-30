@@ -271,6 +271,10 @@ const removeNameInQueue = (message, user) => {
     });
 };
 
+/**
+ * Check if there is any person
+ * that has PO role
+ */
 const hasPoAccessRole = (message) => {
   if (
     message.member.roles.cache.find(
@@ -292,6 +296,17 @@ const findChannelByName = (message, channelName) => {
   return message.guild.channels.cache.find((ch) => ch.name == channelName);
 };
 
+/**
+ * Format date object
+ * to return datetime
+ */
+const getDateTime = (d) => {
+  const date = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+  const time = `${d.getHours()}:${d.getMinutes()}`;
+
+  return date + " " + time;
+};
+
 module.exports = {
   readJson,
   writeJson,
@@ -302,4 +317,5 @@ module.exports = {
   getUser,
   hasPoAccessRole,
   findChannelByName,
+  getDateTime,
 };
