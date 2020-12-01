@@ -4,7 +4,7 @@
   "QUEUE_CHANNEL": "buff-title-queue",
   "BUFF_CHANNEL": "buff-requests",
   "TRANSPORT_TAX": "7.2",
-  "MAX_TRANSPORT_AMOUNT": "4160000",
+  "MAX_TRANSPORT_AMOUNT": "4310000",
   "MANAGEMENT_CHANNEL": "chamber-room",
   "WELCOME_CHANNEL": {
     "Official K53 Discord": {
@@ -15,7 +15,7 @@
     },
     "ISY - Imperial Syndicate": {
       "tag": "ISY",
-      "name": "ISY - Imperial Syndicate",
+      "name": "YSS/ISY",
       "welcomeChannel": "landing-page",
       "rulesChannel": "rules"
     }
