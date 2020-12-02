@@ -1,27 +1,27 @@
 [
   {
     "name": "Chief Builder",
-    "value": "[EMPTY]",
+    "queue": "[EMPTY]",
     "inline": true
   },
   {
     "name": "Grand Maester",
-    "value": "[EMPTY]",
+    "queue": "[EMPTY]",
     "inline": true
   },
   {
     "name": "Master of Ships",
-    "value": "[EMPTY]",
+    "queue": "[EMPTY]",
     "inline": true
   },
   {
     "name": "Master of Whisperers",
-    "value": "[EMPTY]",
+    "queue": "[EMPTY]",
     "inline": true
   },
   {
     "name": "Lord Commander",
-    "value": "[EMPTY]",
+    "queue": "[EMPTY]",
     "inline": true
   }
 ]
