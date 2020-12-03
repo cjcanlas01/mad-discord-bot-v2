@@ -5,7 +5,7 @@ const {
   getCurrentPO,
 } = require("../common/trackingSystem");
 const { hasPoAccessRole } = require("../common/utilities");
-const { msgPoHasNoAccess } = require("../common/messages");
+const { messageForUserThatHasNoPoAccess } = require("../common/messages");
 const config = require("../common/getConfig")();
 const settings = require("../settings.json");
 
@@ -22,7 +22,7 @@ module.exports = {
 
     // Check if user has proper role for access
     if (!hasPoAccessRole(message)) {
-      msgPoHasNoAccess(message);
+      messageForUserThatHasNoPoAccess(message);
       return false;
     }
 

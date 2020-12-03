@@ -1,4 +1,4 @@
-const { poSystem, titleConstants } = require("../common/utilities");
+const { queueingSystem, titleConstants } = require("../common/utilities");
 
 module.exports = {
   name: "research",
@@ -10,6 +10,6 @@ module.exports = {
   po: true,
   execute(message) {
     const BUFF_TITLE = titleConstants().GRAND_MAESTER;
-    poSystem(message, BUFF_TITLE);
+    queueingSystem(message, BUFF_TITLE);
   },
 };

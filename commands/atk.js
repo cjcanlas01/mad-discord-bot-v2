@@ -1,23 +1,25 @@
-const { poSystem, titleConstants } = require("../common/utilities");
+const {
+  queueingSystem,
+  titleConstants,
+  findServerRoleByName,
+} = require("../common/utilities");
+const { getSettings } = require("../config/settings");
+const settings = getSettings();
 
 module.exports = {
   name: "atk",
-  description: `Command for requesting __lord commander buff__ (**${
+  description: `Command for requesting __Lord Commander buff__ (**${
     titleConstants().LORD_COMMANDER
   }**).`,
-  syntax: "@Protocol Officer @ATK or @Protocol Officer @ATK <Username>",
+  syntax: "@Protocol Officer @ATK or @Protocol Officer @ATK [username]",
   po: true,
   execute(message) {
-    const rallyLeadRole = message.member.roles.cache.find(
-      (role) => role.name === "Rally Leader"
-    );
-
-    if (!rallyLeadRole) {
+    // Check if user has proper role
+    if (!findServerRoleByName(message, settings.RALLY_LEADER_ROLE)) {
       message.react("❌");
       return false;
     }
 
-    const BUFF_TITLE = titleConstants().LORD_COMMANDER;
-    poSystem(message, BUFF_TITLE);
+    queueingSystem(message, titleConstants().LORD_COMMANDER);
   },
 };

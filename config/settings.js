@@ -9,6 +9,10 @@ const getSettings = () => {
      */
     PO_ROLE: "Protocol Officer",
     /**
+     * Discord server role to check for rally leaders permissions
+     */
+    RALLY_LEADER_ROLE: "Rally Leader",
+    /**
      * Discord server text channel to display title queue
      */
     QUEUE_CHANNEL: "title-queue",
@@ -58,7 +62,7 @@ const getSettings = () => {
     BUBBLE: {
       guild: "Dominator's Touch",
       channel: "bigmad-channel",
-      cellsCovered: "A1:C3",
+      cellsCovered: "A1:C5",
       TIME_STORE: [
         {
           name: "BBLUVSYOU",
@@ -68,10 +72,19 @@ const getSettings = () => {
           name: "IRONBANK",
           durationAndRenewedCell: ["B3", "C3"],
         },
+        {
+          name: "QCOLDWATER",
+          durationAndRenewedCell: ["B4", "C4"],
+        },
+        {
+          name: "CHETMANLEY",
+          durationAndRenewedCell: ["B5", "C5"],
+        },
       ],
     },
     ACTIVATE: {
       BUBBLE_REMINDER: true,
+      QUEUEING_SYSTEM: true,
     },
   };
 };

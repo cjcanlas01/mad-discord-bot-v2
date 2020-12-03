@@ -3,7 +3,7 @@ const {
   displayQueue,
   hasPoAccessRole,
 } = require("../common/utilities");
-const { msgPoHasNoAccess } = require("../common/messages");
+const { messageForUserThatHasNoPoAccess } = require("../common/messages");
 const config = require("../common/getConfig")();
 
 module.exports = {
@@ -14,7 +14,7 @@ module.exports = {
   execute(message) {
     // Check if user has proper role for access
     if (!hasPoAccessRole(message)) {
-      msgPoHasNoAccess(message);
+      messageForUserThatHasNoPoAccess(message);
       return false;
     }
 

@@ -1,47 +1,40 @@
-const { readJson, writeJson, hasPoAccessRole } = require("../common/utilities");
-const { msgPoHasNoAccess } = require("../common/messages");
+const {
+  readJson,
+  writeJson,
+  hasPoAccessRole,
+  checkChannelIfBuffChannel,
+  messageForUserThatHasNoPoAccess,
+} = require("../common/utilities");
 const config = require("../common/getConfig")();
-const settings = require("../settings.json");
 
 module.exports = {
   name: "ac-stop",
-  description: "AC Lord Commander Buff MODE",
-  syntax: `${config.PREFIX1}AC-stop`,
+  description: "AC Lord Commander Buff Mode",
+  syntax: `${config.PREFIX1}ac-stop`,
   po: true,
-  execute(message) {
-    // Check for the channel access
-    if (message.channel.name != settings.BUFF_CHANNEL) {
-      return false;
-    }
+  async execute(message) {
+    // Check if command is used on correct channel
+    if (!checkChannelIfBuffChannel(message)) return;
 
     // Check if user has proper role for access
     if (!hasPoAccessRole(message)) {
-      msgPoHasNoAccess(message);
+      messageForUserThatHasNoPoAccess(message);
       return false;
     }
 
-    readJson("/data/buff-mode.json")
-      .then((data) => {
-        /**
-         * If buff mode condition is true, make it false
-         */
-        if (data["buff-mode"]) {
-          // Update buff-mode value to false
-          data["buff-mode"] = false;
-          writeJson("/data/buff-mode.json", data)
-            .then((data) => {
-              if (data) {
-                console.log(data);
-                message.channel.send(
-                  `Alliance Conquest Buff Mode OFF! Regular titles are enabled! Get them!`
-                );
-              }
-            })
-            .catch((err) => {
-              throw new Error(err);
-            });
+    const r = await readJson("/data/buff-mode.json");
+    if (r.success) {
+      if (r.result["buff-mode"]) {
+        // Update buff mode to false
+        r.result["buff-mode"] = false;
+
+        const isFileUpdated = await writeJson("/data/buff-mode.json", r.result);
+        if (isFileUpdated) {
+          message.channel.send(
+            `Alliance Conquest Buff Mode is OFF! Regular titles are enabled! Get them!`
+          );
         }
-      })
-      .catch((error) => console.log(error));
+      }
+    }
   },
 };

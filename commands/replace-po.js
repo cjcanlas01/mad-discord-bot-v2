@@ -4,10 +4,13 @@ const {
   getCurrentPO,
   addOrRemoveRole,
 } = require("../common/trackingSystem");
-const { hasPoAccessRole } = require("../common/utilities");
-const { msgPoHasNoAccess } = require("../common/messages");
+const {
+  hasPoAccessRole,
+  messageForUserThatHasNoPoAccess,
+} = require("../common/utilities");
+const { getSettings } = require("../config/settings");
 const config = require("../common/getConfig")();
-const settings = require("../settings.json");
+const settings = getSettings();
 
 module.exports = {
   name: "replace-po",
@@ -22,7 +25,7 @@ module.exports = {
 
     // Check if user has proper role for access
     if (!hasPoAccessRole(message)) {
-      msgPoHasNoAccess(message);
+      messageForUserThatHasNoPoAccess(message);
       return false;
     }
 

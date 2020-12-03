@@ -1,18 +1,18 @@
-const { removeNameInQueue, getUser } = require("../common/utilities");
+const {
+  removeNameInQueue,
+  getAccountNameFromCommandRequest,
+} = require("../common/utilities");
 const config = require("../common/getConfig")();
-const settings = require("../settings.json");
 
 module.exports = {
   name: "done",
-  description: "Command to use when finish consuming title buff.",
-  syntax: `${config.PREFIX1}done or ${config.PREFIX1}done <Username>`,
+  description: "Use when finished using title buff",
+  syntax: `${config.PREFIX1}done or ${config.PREFIX1}done [username]`,
   po: true,
   execute(message) {
-    // Check for the channel access
-    if (message.channel.name != settings.BUFF_CHANNEL) {
-      return false;
-    }
+    // Check if command is used on correct channel
+    if (!checkChannelIfBuffChannel(message)) return;
 
-    removeNameInQueue(message, getUser(message));
+    removeNameInQueue(message, getAccountNameFromCommandRequest(message));
   },
 };
