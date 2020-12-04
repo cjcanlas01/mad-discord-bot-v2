@@ -12,7 +12,7 @@ module.exports = bootstrapWelcome = (client) => {
         return `Hey ${name.toString()}, welcome to MAD Discord :tada::hugging: ! Please change your name to the character in game with your Alliance tag in front. Example : [ABC] JohnDoe`;
       },
       K31: function (name, rulesChannel = null) {
-        return `Hey ${name.toString()}, welcome to K40 Discord :tada::hugging: ! Please change your name to the character in game with your Alliance tag in front. Example : [ABC] JohnDoe`;
+        return `Hey ${name.toString()}, welcome to K31 Discord :tada::hugging: ! Please change your name to the character in game with your Alliance tag in front. Example : [ABC] JohnDoe`;
       },
     };
 

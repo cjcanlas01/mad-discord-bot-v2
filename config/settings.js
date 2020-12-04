@@ -58,7 +58,7 @@ const getSettings = () => {
     WELCOME_CHANNEL: {
       "K31 Discord": {
         tag: "K31",
-        name: "Official K53 Discord",
+        name: "K31 Discord",
         welcomeChannel: "welcome",
         rulesChannel: "",
       },
