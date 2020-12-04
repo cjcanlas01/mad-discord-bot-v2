@@ -10,7 +10,7 @@ const config = require("../common/getConfig")();
 module.exports = {
   name: "ac-mode",
   description: "AC Lord Commander Buff Mode",
-  syntax: `${config.PREFIX1}ac-mode`,
+  syntax: `${config.PREFIX}ac-mode`,
   po: true,
   async execute(message) {
     // Check if command is used on correct channel

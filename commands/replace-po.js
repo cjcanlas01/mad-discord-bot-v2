@@ -1,27 +1,25 @@
 const {
-  addRowData,
-  prepTrackData,
-  getCurrentPO,
-  addOrRemoveRole,
+  addLogRecord,
+  prepareLoggedData,
+  getUserWithPoRole,
+  addOrRemoveRoleFromUser,
 } = require("../common/trackingSystem");
 const {
   hasPoAccessRole,
+  getAvailableAccountName,
+  checkChannelIfBuffChannel,
   messageForUserThatHasNoPoAccess,
 } = require("../common/utilities");
-const { getSettings } = require("../config/settings");
 const config = require("../common/getConfig")();
-const settings = getSettings();
 
 module.exports = {
   name: "replace-po",
   description: "Replace current Protocol officer in case he/ she becomes afk.",
-  syntax: `${config.PREFIX1}replace-po`,
+  syntax: `${config.PREFIX}replace-po`,
   po: true,
   execute(message) {
-    // Check for the channel access
-    if (message.channel.name != settings.BUFF_CHANNEL) {
-      return false;
-    }
+    // Check if command is used on correct channel
+    if (!checkChannelIfBuffChannel(message)) return;
 
     // Check if user has proper role for access
     if (!hasPoAccessRole(message)) {
@@ -29,41 +27,43 @@ module.exports = {
       return false;
     }
 
-    const po = getCurrentPO(message);
-    const author = message.guild.member(message.author).nickname;
+    const po = getUserWithPoRole(message)[0];
+    const author = getAvailableAccountName(message);
+    console.log(po);
 
     if (po) {
-      const poNickname = po[0].nickname;
-      const poID = po[0].id;
+      const nickname = po.nickname;
+      const id = po.id;
 
-      if (poNickname == author) {
+      if (nickname == author) {
         message.channel.send("You shall not pass! Use !stop-po instead.");
         return;
       }
 
-      if (poNickname != author) {
-        message.guild.member(message.author).nickname = poNickname;
-        const dataForStop = prepTrackData(message, "STOP");
-        if (dataForStop) {
-          addRowData(dataForStop);
-          addOrRemoveRole(poID, false, message);
+      if (nickname != author) {
+        message.guild.member(message.author).nickname = nickname;
+        const currentUserRecord = prepareLoggedData(message, "STOP");
+        if (currentUserRecord) {
+          addLogRecord(currentUserRecord);
+          addOrRemoveRoleFromUser(id, false, message);
         }
-
         message.guild.member(message.author).nickname = author;
-        const dataForStart = prepTrackData(message, "START");
-        if (dataForStart) {
+        const upcomingUserRecord = prepareLoggedData(message, "START");
+        if (upcomingUserRecord) {
+          /**
+           * Delay adding record
+           * to follow log flow
+           */
           setTimeout(function () {
-            addRowData(dataForStart);
-            addOrRemoveRole(message.author.id, true, message);
+            addLogRecord(upcomingUserRecord);
+            addOrRemoveRoleFromUser(message.author.id, true, message);
           }, 1000);
         }
-
         message.channel.send(
           `NOW! The Protocol officer has been replaced. New Protocol officer is ${message.author.toString()}.`
         );
         return;
       }
-
       message.channel.send("There is a Protocol officer in session!");
       return;
     } else {

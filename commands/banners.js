@@ -7,7 +7,7 @@ const config = require("../common/getConfig")();
 module.exports = {
   name: "banners",
   description: "Show banner commands.",
-  syntax: `${config.PREFIX1}banners`,
+  syntax: `${config.PREFIX}banners`,
   includes: true,
   execute(message) {
     const { commands } = message.client;

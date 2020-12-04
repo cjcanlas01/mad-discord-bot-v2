@@ -6,10 +6,10 @@ module.exports = {
     titleConstants().GRAND_MAESTER
   }**).`,
   syntax:
-    "@Protocol Offcer @Research or @Protocol Officer @Research <Username>",
+    "@Protocol Offcer @Research or @Protocol Officer @Research [username]",
   po: true,
+  isRoleCommand: true,
   execute(message) {
-    const BUFF_TITLE = titleConstants().GRAND_MAESTER;
-    queueingSystem(message, BUFF_TITLE);
+    queueingSystem(message, titleConstants().GRAND_MAESTER);
   },
 };

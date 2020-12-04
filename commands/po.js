@@ -7,7 +7,7 @@ const config = require("../common/getConfig")();
 module.exports = {
   name: "po",
   description: "Show PO-related commands.",
-  syntax: `${config.PREFIX1}po`,
+  syntax: `${config.PREFIX}po`,
   includes: true,
   execute(message) {
     const { commands } = message.client;

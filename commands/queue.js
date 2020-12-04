@@ -8,7 +8,7 @@ const config = require("../common/getConfig")();
 module.exports = {
   name: "queue",
   description: "Update list of requested titles in queue channel",
-  syntax: `${config.PREFIX1}queue`,
+  syntax: `${config.PREFIX}queue`,
   po: true,
   execute(message) {
     // Check if user has proper role for access

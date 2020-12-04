@@ -7,8 +7,8 @@ const { readJson } = require("../common/utilities");
 module.exports = {
   name: "req",
   description: "Compute requested resources transport count.",
-  syntax: `${config.PREFIX1}req <resource type>-<amount>`,
-  execute(message) {
+  syntax: `${config.PREFIX}req [resource type]-[amount]`,
+  async execute(message) {
     const computeLoadCount = (data, resourceCount) => {
       const TAX_RATE = Number(data.TRANSPORT_TAX);
       const TRANSPORT_AMT = Number(data.MAX_TRANSPORT_AMOUNT);

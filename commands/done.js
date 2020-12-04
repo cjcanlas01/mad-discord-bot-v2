@@ -1,13 +1,14 @@
 const {
   removeNameInQueue,
   getAccountNameFromCommandRequest,
+  checkChannelIfBuffChannel,
 } = require("../common/utilities");
 const config = require("../common/getConfig")();
 
 module.exports = {
   name: "done",
   description: "Use when finished using title buff",
-  syntax: `${config.PREFIX1}done or ${config.PREFIX1}done [username]`,
+  syntax: `${config.PREFIX}done or ${config.PREFIX}done [username]`,
   po: true,
   execute(message) {
     // Check if command is used on correct channel

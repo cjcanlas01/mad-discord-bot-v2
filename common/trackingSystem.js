@@ -1,310 +1,154 @@
-const getConfig = require("../common/getConfig");
-const config = getConfig();
-const { GoogleSpreadsheet } = require("google-spreadsheet");
-const doc = new GoogleSpreadsheet(config.SPREADSHEET_ID);
-const settings = require("../settings.json");
-
-/**
- * Function to read commands only available with prefix "!"
- *
- * @param client | discord object
- * @param message | discord object
- * @param prefix | string
- * @return null
- */
-const commandHandler = (client, message, prefix) => {
-  if (!message.content.startsWith(prefix) || message.author.bot) {
-    return false;
-  }
-
-  const args = message.content.slice(prefix.length).split(/ +/);
-  const command = args.shift().toLowerCase();
-  // List of available commands to prefix "!"
-  const acceptableCommands = [
-    "start-po",
-    "stop-po",
-    "replace-po",
-    "commands",
-    "queue",
-    "ac-mode",
-    "ac-stop",
-    "remove",
-    "reset-queue",
-    "calc",
-    "madhelp",
-    "done",
-    "r-rallies",
-    "r-rallies2",
-    "d-rallies",
-    "d-rallies2",
-    "unc-tp",
-    "rtj-tp",
-    "startpurge",
-    "endpurge",
-    "hive",
-    "rf",
-    "tf",
-    "bf",
-    "ty1",
-    "ty2",
-    "ty3",
-    "banners",
-    "po",
-    "req",
-    "set-tpamt",
-    "set-tptax",
-    "show-tpamt",
-    "show-tptax",
-    "set-time-unc",
-    "set-time-mad",
-    "tealc",
-    "set-time",
-  ];
-
-  const sillyCommands = require("../common/getSillyMessages")();
-  if (
-    !client.commands.has(command) &&
-    !acceptableCommands.includes(command) &&
-    sillyCommands.has(command)
-  ) {
-    message.channel.send(sillyCommands.get(command));
-    return;
-  }
-
-  if (!client.commands.has(command) || !acceptableCommands.includes(command))
-    return;
-
-  try {
-    client.commands.get(command).execute(message, args);
-    return true;
-  } catch (error) {
-    console.error(error);
-    message.reply("there was an error trying to execute that command!");
-  }
-};
+const config = require("../common/getConfig")();
+const { getSettings } = require("../config/settings");
+const settings = getSettings();
+const {
+  getAvailableAccountName,
+  getUserWithPoRole,
+  findServerRoleByName,
+  initGoogleSpreadsheetConnection,
+} = require("../common/utilities");
 
 /**
  * Get alliance tag of player name on discord server
- * @param nickname | Discord Nickname
+ * @param nickname | string
  */
 const getAllianceTag = (nickname) => {
-  const tag = nickname.slice(0, 5);
-  const tagWithoutBrackets = tag.substr(1, tag.length - 2);
-  return tagWithoutBrackets;
+  let tag = nickname.slice(0, 5);
+  // Remove brackets from string
+  tag = tag.substr(1, tag.length - 2);
+  return tag;
+};
+
+/**
+ * Clean player name to
+ * get single string
+ */
+const sanitizePlayerName = (playerName) => {
+  /**
+   * If space occurs on first index,
+   * remove space
+   */
+  if (playerName[0] == " ") {
+    playerName.shift();
+  }
+
+  /**
+   * Find slash to identify
+   * first of two names based
+   * on slash position
+   */
+  const findIndexOfSlash = playerName.findIndex((e) => e == "/");
+  if (findIndexOfSlash != -1) {
+    return playerName.slice(0, findIndexOfSlash - 1).join("");
+  }
+
+  return playerName.join("");
 };
 
 /**
  * Get player name of user on discord server
- * @param nickname | Discord Nickname
+ * @param nickname | string
+ * @returns string
  */
 const getPlayerName = (nickname) => {
+  // Convert string to array
   nickname = Array.from(nickname);
-  let lastTag;
-  for (let i = nickname.length; i >= 0; i--) {
-    if (nickname[i] == "]") {
-      lastTag = i;
-    }
-  }
+  const findWhereBracketFinishes = nickname.findIndex((e) => e == "]");
 
-  const playerName = nickname.slice(lastTag + 1, nickname.length);
-  const sanitizedPlayerName = (() => {
-    // Remove space on first index if found, due to alliance tag removed
-    if (playerName[0] == " ") {
-      playerName.shift();
-    }
+  const playerName = nickname.slice(
+    findWhereBracketFinishes + 1,
+    nickname.length
+  );
 
-    // For players that has two names
-    const slashIndex = Array.from(playerName).findIndex((val) => val == "/");
-    if (slashIndex != -1) {
-      return playerName.slice(0, slashIndex - 1).join("");
-    }
-
-    return playerName.join("");
-  })();
-  return sanitizedPlayerName;
+  return sanitizePlayerName(playerName);
 };
 
 /**
- * Function to prepare tracking data to add to sheet row using google sheets api
+ * Get proper time value
+ * @param hour
+ * @param min
+ */
+const getTime = (hour, min) => {
+  if (min >= 0 && min <= 9) {
+    return `${hour}:0${min}`;
+  }
+
+  return `${hour}:${min}`;
+};
+
+/**
+ * Get date and time for logging
+ * @param d | date
+ * @returns object
+ */
+const getDateForLogRecord = (d) => {
+  const date = `${d.getFullYear()}-${d.getUTCMonth() + 1}-${d.getUTCDate()}`;
+  const time = getTime(d.getUTCHours(), d.getUTCMinutes());
+
+  return {
+    date,
+    time,
+  };
+};
+
+/**
+ * Prepare logging data for adding record on spreadsheet via api access
  *
  * @param message | discord object
  * @param event | string
- * @return object
+ * @returns object
  */
-const prepTrackData = (message, event) => {
-  const guildData = message.guild.member(message.author);
-  const date = new Date(message.createdAt);
-  const nickname =
-    guildData.nickname != null ? guildData.nickname : message.author.username;
-
-  const dateFormat =
-    date.getUTCFullYear() +
-    "-" +
-    (date.getUTCMonth() + 1) +
-    "-" +
-    date.getUTCDate();
-  const timeFormat = (function () {
-    const UTCHour = date.getUTCHours();
-    const UTCMin = date.getUTCMinutes();
-    // If minutes is whole number (0 to 9), add another zero
-    if (UTCMin >= 0 && UTCMin <= 9) {
-      return UTCHour + ":" + "0" + UTCMin;
-    }
-
-    return UTCHour + ":" + UTCMin;
-  })();
+const prepareLoggedData = (message, event) => {
+  const dateAt = new Date(message.createdAt);
+  const nickname = getAvailableAccountName(message);
+  const { date, time } = getDateForLogRecord(dateAt);
 
   return {
     ALLIANCE: getAllianceTag(nickname),
     NAME: getPlayerName(nickname),
     ACTION: event,
-    DATE: dateFormat,
-    TIME: timeFormat,
+    DATE: date,
+    TIME: time,
   };
 };
 
 /**
- * Function to add tracking data to row sheet using google sheet api
+ * Add log record to google spreadsheet
  *
- * @param rowData | object
- * @return null
+ * @param record | object
  */
-const addRowData = (rowData) => {
-  (async function () {
-    // await doc.useServiceAccountAuth(require('./client_secret.json'));
-    await doc.useServiceAccountAuth({
-      client_email: config.GOOGLE_SERVICE_ACCOUNT_EMAIL,
-      private_key: config.GOOGLE_PRIVATE_KEY,
-    });
-    await doc.loadInfo();
-    const sheet = doc.sheetsByIndex[0]; // or use doc.sheetsById[id]
-    await sheet.addRow(rowData);
-  })(rowData);
+const addLogRecord = async (record) => {
+  const sheet = await initGoogleSpreadsheetConnection(
+    config.SPREADSHEET_ID,
+    config.GOOGLE_SERVICE_ACCOUNT_EMAIL,
+    config.GOOGLE_PRIVATE_KEY
+  );
+
+  await sheet.addRow(record);
 };
 
 /**
- * Function to get role object
- * @param roleString | string
- * @param message | Discord Message Object
- */
-const getRoleObj = (roleString, message) => {
-  // Find discord role object
-  let role = message.guild.roles.cache.find((data) => {
-    return data.name == roleString;
-  });
-  return role;
-};
-
-/**
- * Function to add or remove role of Protocol officer
- * @param id | Discord ID of user
+ * Add or remove
+ * Protocol Officer role from user
+ * @param id | discord id
  * @param condition | boolean
- * @param message | Discord Message Object
+ * @param message | discord message
  */
-const addOrRemoveRole = (id, condition, message) => {
-  message.guild.members.fetch(id).then((memberData) => {
-    const role = getRoleObj(settings.PO_ROLE, message);
+const addOrRemoveRoleFromUser = (id, condition, message) => {
+  message.guild.members.fetch(id).then((info) => {
+    const role = findServerRoleByName(message, settings.PO_ROLE);
     if (condition) {
-      memberData.roles.add(role);
+      info.roles.add(role);
     } else {
-      memberData.roles.remove(role);
+      info.roles.remove(role);
     }
   });
 };
 
-/**
- * Function to identify if there is current user with Protocol officer role
- *
- * @param message | Discord Message Object
- * @return false (boolean) or user data (object)
- */
-const getCurrentPO = (message) => {
-  // Get list of all members with Protocol officer role
-  const poData = message.guild.members.cache
-    .filter((member) => {
-      return member.roles.cache.find((data) => {
-        return data.name == settings.PO_ROLE;
-      });
-    })
-    .map((member) => {
-      return {
-        nickname: member.nickname,
-        id: member.id,
-      };
-    });
-
-  // Get only the name of users
-  const isPOSingle = Object.keys(poData).map((val) => {
-    return poData[val].nickname;
-  });
-
-  // Check if there are one or more users with Protocol officer
-  if (isPOSingle.length > 1) {
-    message.channel.send(
-      "There are currently more than one users with **Protocol Officer** role. Please check!"
-    );
-    return false;
-  }
-
-  // Check if there is no Protocol officer
-  if (isPOSingle.length < 1) {
-    return false;
-  }
-
-  return poData;
-};
-
-const getSetCallData = async (
-  bankType,
-  value,
-  functionType,
-  setTimeAndCheck,
-  checkType,
-  checker
-) => {
-  const doc = new GoogleSpreadsheet(config.TIME_STORE_SPREADSHEET_ID);
-  await doc.useServiceAccountAuth({
-    client_email: config.GOOGLE_SERVICE_ACCOUNT_EMAIL,
-    private_key: config.GOOGLE_PRIVATE_KEY,
-  });
-  const coords = {
-    UNC_BANK: "B2",
-    MAD_BANK: "B3",
-    UNC_CHECK: "B4",
-    MAD_CHECK: "B5",
-  };
-  await doc.loadInfo();
-  const sheet = doc.sheetsByIndex[0];
-  await sheet.loadCells("A1:B5");
-  const dateTimeCell = sheet.getCellByA1(coords[bankType]);
-
-  switch (functionType) {
-    case "GET":
-      return dateTimeCell.value;
-    case "SET":
-      if (!value) {
-        return false;
-      }
-      const checkCell = sheet.getCellByA1(coords[checkType]);
-
-      if (!setTimeAndCheck) {
-        dateTimeCell.value = value;
-      } else {
-        dateTimeCell.value = value;
-        checkCell.value = checker;
-      }
-      await sheet.saveUpdatedCells();
-      return true;
-  }
-};
-
 module.exports = {
-  commandHandler,
-  prepTrackData,
-  addRowData,
+  prepareLoggedData,
+  addLogRecord,
   getPlayerName,
-  getRoleObj,
-  addOrRemoveRole,
-  getCurrentPO,
-  getSetCallData,
+  addOrRemoveRoleFromUser,
+  getUserWithPoRole,
 };

@@ -7,7 +7,7 @@ const config = require("../common/getConfig")();
 module.exports = {
   name: "commands",
   description: "Shows list of extra commands.",
-  syntax: `${config.PREFIX1}commands`,
+  syntax: `${config.PREFIX}commands`,
   includes: true,
   execute(message) {
     const keys = Array.from(commands().keys());

@@ -1,10 +1,10 @@
 const config = require("../common/getConfig")();
-const { getDateTime } = require("../common/utilities");
-const { getSettings } = require("../config/settings");
 const {
+  getDateTime,
   initGoogleSpreadsheetConnection,
   getSheetCellVal,
-} = require("../bootstrap/bubble");
+} = require("../common/utilities");
+const { getSettings } = require("../config/settings");
 const settings = getSettings();
 
 /**
@@ -33,7 +33,7 @@ const prepareNewDuration = (durationInput) => {
 module.exports = {
   name: "set-time",
   description: "Set time for bubble reminders",
-  syntax: `${config.PREFIX1}set-time [castle name] [duration]`,
+  syntax: `${config.PREFIX}set-time [castle name] [duration]`,
   async execute(message) {
     /**
      * Restrict command execution

@@ -8,6 +8,7 @@ module.exports = {
   syntax:
     "@Protocol Officer @Building or @Protocol Officer @Building [username]",
   po: true,
+  isRoleCommand: true,
   execute(message) {
     queueingSystem(message, titleConstants().CHIEF_BUILDER);
   },

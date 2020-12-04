@@ -7,6 +7,7 @@ module.exports = {
   }**).`,
   syntax: "@Protocol Officer @Gather or @Protocol Officer @Gather [username]",
   po: true,
+  isRoleCommand: true,
   execute(message) {
     queueingSystem(message, titleConstants().MASTER_OF_SHIPS);
   },

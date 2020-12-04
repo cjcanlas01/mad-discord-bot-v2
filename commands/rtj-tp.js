@@ -1,17 +1,20 @@
+const { findServerRoleByName } = require("../common/utilities");
 const config = require("../common/getConfig")();
-const settings = require("../settings.json");
-const { getRoleObj } = require("../common/trackingSystem");
+const { getSettings } = require("../config/settings");
+const settings = getSettings();
 
 module.exports = {
   name: "rtj-tp",
   description: `Show Run The Jewels Transport banner.`,
-  syntax: `${config.PREFIX1}rtj-tp`,
+  syntax: `${config.PREFIX}rtj-tp`,
   banners: true,
   execute(message) {
-    // Get bank role
-    const bank = getRoleObj(settings.BANK_ROLE, message);
-    message.channel.send(bank.toString(), {
-      files: ["./images/rtj-tp.jpg"],
-    });
+    const role = findServerRoleByName(message, settings.BANK_ROLE);
+
+    if (role) {
+      message.channel.send(bank.toString(), {
+        files: ["./images/rtj-tp.jpg"],
+      });
+    }
   },
 };

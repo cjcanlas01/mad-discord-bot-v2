@@ -1,32 +1,10 @@
 const config = require("../common/getConfig")();
+const {
+  initGoogleSpreadsheetConnection,
+  getSheetCellVal,
+} = require("../common/utilities");
 const { getSettings } = require("../config/settings");
-const { GoogleSpreadsheet } = require("google-spreadsheet");
 const settings = getSettings();
-
-/**
- * Established google spreadsheet connection
- * and select first sheet by default
- */
-const initGoogleSpreadsheetConnection = async (
-  googleSpreadSheetId,
-  serviceAccountEmail,
-  privateKey
-) => {
-  const doc = new GoogleSpreadsheet(googleSpreadSheetId);
-  await doc.useServiceAccountAuth({
-    client_email: serviceAccountEmail,
-    private_key: privateKey,
-  });
-  await doc.loadInfo();
-  return doc.sheetsByIndex[0];
-};
-
-/**
- * Get value from spreadsheet cell
- */
-const getSheetCellVal = (sheet, cell) => {
-  return sheet.getCellByA1(cell).value;
-};
 
 /**
  * Get date time now
@@ -128,6 +106,4 @@ const bootstrapBubble = async (client) => {
 
 module.exports = {
   bootstrapBubble,
-  getSheetCellVal,
-  initGoogleSpreadsheetConnection,
 };

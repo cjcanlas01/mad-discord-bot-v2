@@ -1,24 +1,24 @@
 const {
-  addRowData,
-  prepTrackData,
-  addOrRemoveRole,
-  getCurrentPO,
+  addLogRecord,
+  prepareLoggedData,
+  addOrRemoveRoleFromUser,
+  getUserWithPoRole,
 } = require("../common/trackingSystem");
-const { hasPoAccessRole } = require("../common/utilities");
-const { messageForUserThatHasNoPoAccess } = require("../common/messages");
+const {
+  hasPoAccessRole,
+  messageForUserThatHasNoPoAccess,
+  checkChannelIfBuffChannel,
+} = require("../common/utilities");
 const config = require("../common/getConfig")();
-const settings = require("../settings.json");
 
 module.exports = {
   name: "start-po",
   description: "Start your PO session.",
-  syntax: `${config.PREFIX1}start-po`,
+  syntax: `${config.PREFIX}start-po`,
   po: true,
   execute(message) {
-    // Check for the channel access
-    if (message.channel.name != settings.BUFF_CHANNEL) {
-      return false;
-    }
+    // Check if command is used on correct channel
+    if (!checkChannelIfBuffChannel(message)) return;
 
     // Check if user has proper role for access
     if (!hasPoAccessRole(message)) {
@@ -26,16 +26,14 @@ module.exports = {
       return false;
     }
 
-    const po = getCurrentPO(message);
+    const po = getUserWithPoRole(message);
 
     if (po) {
       message.channel.send("There is a Protocol officer in session!");
     } else {
-      const data = prepTrackData(message, "START");
-      addRowData(data);
-      const discordId = message.author.id;
-      addOrRemoveRole(discordId, true, message);
-
+      const log = prepareLoggedData(message, "START");
+      addLogRecord(log);
+      addOrRemoveRoleFromUser(message.author.id, true, message);
       message.channel.send(
         "NOW! A new protocole officer is here to give buffs. Thank you for your time generous PO !"
       );

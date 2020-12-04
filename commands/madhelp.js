@@ -7,7 +7,7 @@ const config = require("../common/getConfig")();
 module.exports = {
   name: "madhelp",
   description: "Show available commands of MAD bot.",
-  syntax: `${config.PREFIX1}madhelp`,
+  syntax: `${config.PREFIX}madhelp`,
   includes: true,
   execute(message) {
     const { commands } = message.client;

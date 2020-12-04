@@ -3,7 +3,7 @@ const config = require("../common/getConfig")();
 module.exports = {
   name: "hive",
   description: `Show Hive Under Attack banner.`,
-  syntax: `${config.PREFIX1}hive`,
+  syntax: `${config.PREFIX}hive`,
   banners: true,
   execute(message) {
     // Get bank role

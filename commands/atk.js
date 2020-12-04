@@ -13,6 +13,7 @@ module.exports = {
   }**).`,
   syntax: "@Protocol Officer @ATK or @Protocol Officer @ATK [username]",
   po: true,
+  isRoleCommand: true,
   execute(message) {
     // Check if user has proper role
     if (!findServerRoleByName(message, settings.RALLY_LEADER_ROLE)) {

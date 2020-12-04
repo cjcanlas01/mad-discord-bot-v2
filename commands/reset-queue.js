@@ -2,23 +2,23 @@ const {
   writeJson,
   displayQueue,
   hasPoAccessRole,
+  messageForUserThatHasNoPoAccess,
 } = require("../common/utilities");
-const { messageForUserThatHasNoPoAccess } = require("../common/messages");
 const config = require("../common/getConfig")();
 
 module.exports = {
   name: "reset-queue",
   description: "Reset title queue.",
-  syntax: `${config.PREFIX1}reset-queue`,
+  syntax: `${config.PREFIX}reset-queue`,
   po: true,
-  execute(message) {
+  async execute(message) {
     // Check if user has proper role for access
     if (!hasPoAccessRole(message)) {
       messageForUserThatHasNoPoAccess(message);
       return false;
     }
 
-    const queueObj = [
+    const queue = [
       {
         name: "Chief Builder",
         value: "[EMPTY]",
@@ -46,13 +46,11 @@ module.exports = {
       },
     ];
 
-    writeJson("/data/queue.json", queueObj)
-      .then((data) => {
-        message.channel.send("Title queue is empty now.");
-        displayQueue(message);
-      })
-      .catch((err) => {
-        throw new Error(err);
-      });
+    const isFileUpdated = await writeJson("/data/queue.json", queue);
+
+    if (isFileUpdated.success) {
+      message.channel.send("Title queue is empty now.");
+      displayQueue(message);
+    }
   },
 };

@@ -37,6 +37,11 @@ const getSettings = () => {
      */
     MANAGEMENT_CHANNEL: "bigmad-channel",
     /**
+     * Discord server role for
+     * sister alliance of main alliance
+     */
+    SISTER_ALLIANCE_ROLE: "MaD Member",
+    /**
      * Welcome channel object to be used for setting up greetings messages for multiple servers
      * Syntax:
      * [Discord server name]
@@ -62,7 +67,7 @@ const getSettings = () => {
     BUBBLE: {
       guild: "Dominator's Touch",
       channel: "bigmad-channel",
-      cellsCovered: "A1:C5",
+      cellsCovered: "A1:C6",
       TIME_STORE: [
         {
           name: "BBLUVSYOU",
@@ -79,6 +84,10 @@ const getSettings = () => {
         {
           name: "CHETMANLEY",
           durationAndRenewedCell: ["B5", "C5"],
+        },
+        {
+          name: "AKUMAJAYPEE",
+          durationAndRenewedCell: ["B6", "C6"],
         },
       ],
     },

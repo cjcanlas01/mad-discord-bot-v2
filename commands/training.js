@@ -6,10 +6,10 @@ module.exports = {
     titleConstants().MASTER_OF_WHISPERERS
   }**).`,
   syntax:
-    "@Protocol Offcer @Training or @Protocol Officer @Training <Username>",
+    "@Protocol Offcer @Training or @Protocol Officer @Training [username]",
   po: true,
+  isRoleCommand: true,
   execute(message) {
-    const BUFF_TITLE = titleConstants().MASTER_OF_WHISPERERS;
-    queueingSystem(message, BUFF_TITLE);
+    queueingSystem(message, titleConstants().MASTER_OF_WHISPERERS);
   },
 };

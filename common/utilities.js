@@ -1,9 +1,50 @@
 const fs = require("fs");
 const path = require("path");
 const embed = require("../common/discordEmbed");
+// const { getUserWithPoRole } = require("../common/trackingSystem");
+const { GoogleSpreadsheet } = require("google-spreadsheet");
 const { getSettings } = require("../config/settings");
 const settings = getSettings();
-const { getCurrentPO } = require("../common/trackingSystem");
+
+/**
+ * Identify if there is current user with Protocol officer role
+ *
+ * @param message | discord message
+ * @return  boolean or object
+ */
+const getUserWithPoRole = (message) => {
+  /**
+   * Get list of all member that
+   * currently has Protocol Officer role
+   */
+  const poList = message.guild.members.cache
+    .filter((member) => {
+      return member.roles.cache.find((data) => {
+        return data.name == settings.PO_ROLE;
+      });
+    })
+    .map((member) => {
+      return {
+        nickname: member.nickname || member.user.username,
+        id: member.id,
+      };
+    });
+
+  /**
+   * Check if there are more active
+   * user with Protocol Officer role
+   */
+  if (poList.length > 1) {
+    return false;
+  }
+
+  // Check if there is no Protocol officer
+  if (poList.length < 1) {
+    return false;
+  }
+
+  return poList;
+};
 
 /**
  * Find discord channel object
@@ -22,7 +63,7 @@ const findChannelByName = (message, channelName) => {
  * @returns discord role
  */
 const findServerRoleByName = (message, roleName) => {
-  return message.guild.channels.role.find((r) => r.name == roleName);
+  return message.guild.roles.cache.find((r) => r.name == roleName);
 };
 
 /**
@@ -203,14 +244,13 @@ const queueingSystem = async (message, titleBuff) => {
       // Determine if buff mode is active and title other than Lord Commander is requested
       (mode && titleBuff != title.LORD_COMMANDER) ||
       // Check if there is a Protocol Officer active
-      !getCurrentPO(message)
+      !getUserWithPoRole(message)
     ) {
       message.react("❌");
       return false;
     }
 
     const requestingUser = getAccountNameFromCommandRequest(message);
-    console.log(requestingUser);
     const queue = await readJson("/data/queue.json");
 
     if (queue.success) {
@@ -258,7 +298,6 @@ const removeNameInQueue = async (message, requestingUser) => {
     let result = r.result;
     let titleWhereRequestingUserExists;
     for (let titles of result) {
-      console.log(checkIfUserIsInQueue(titles, requestingUser));
       if (checkIfUserIsInQueue(titles, requestingUser)) {
         // Filter out requesting user from the title
         titles.value = titles.value.filter((e) => {
@@ -330,6 +369,31 @@ const messageForUserThatHasNoPoAccess = (message) => {
   );
 };
 
+/**
+ * Established google spreadsheet connection
+ * and select first sheet by default
+ */
+const initGoogleSpreadsheetConnection = async (
+  googleSpreadSheetId,
+  serviceAccountEmail,
+  privateKey
+) => {
+  const doc = new GoogleSpreadsheet(googleSpreadSheetId);
+  await doc.useServiceAccountAuth({
+    client_email: serviceAccountEmail,
+    private_key: privateKey,
+  });
+  await doc.loadInfo();
+  return doc.sheetsByIndex[0];
+};
+
+/**
+ * Get value from spreadsheet cell
+ */
+const getSheetCellVal = (sheet, cell) => {
+  return sheet.getCellByA1(cell).value;
+};
+
 module.exports = {
   readJson,
   writeJson,
@@ -337,11 +401,15 @@ module.exports = {
   displayQueue,
   queueingSystem,
   titleConstants,
+  getSheetCellVal,
   hasPoAccessRole,
+  getUserWithPoRole,
   findChannelByName,
   removeNameInQueue,
   findServerRoleByName,
+  getAvailableAccountName,
   checkChannelIfBuffChannel,
   getAccountNameFromCommandRequest,
+  initGoogleSpreadsheetConnection,
   messageForUserThatHasNoPoAccess,
 };
