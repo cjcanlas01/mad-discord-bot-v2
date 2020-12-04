@@ -2,12 +2,12 @@ const {
   addLogRecord,
   prepareLoggedData,
   addOrRemoveRoleFromUser,
-  getUserWithPoRole,
 } = require("../common/trackingSystem");
 const {
   hasPoAccessRole,
-  messageForUserThatHasNoPoAccess,
+  getUserWithPoRole,
   checkChannelIfBuffChannel,
+  messageForUserThatHasNoPoAccess,
 } = require("../common/utilities");
 const config = require("../common/getConfig")();
 

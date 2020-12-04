@@ -12,7 +12,7 @@ module.exports = {
     const role = findServerRoleByName(message, settings.BANK_ROLE);
 
     if (role) {
-      message.channel.send(bank.toString(), {
+      message.channel.send(role.toString(), {
         files: ["./images/rtj-tp.jpg"],
       });
     }

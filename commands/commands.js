@@ -14,7 +14,7 @@ module.exports = {
     message.author.send(
       "**Current existing commands! Try them and be entertained!**"
     );
-    message.author.send("**HOW? Use !<command>**");
+    message.author.send("**HOW? Use ![command]**");
     message.author.send(keys);
   },
 };

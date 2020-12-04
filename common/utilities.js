@@ -1,7 +1,6 @@
 const fs = require("fs");
 const path = require("path");
 const embed = require("../common/discordEmbed");
-// const { getUserWithPoRole } = require("../common/trackingSystem");
 const { GoogleSpreadsheet } = require("google-spreadsheet");
 const { getSettings } = require("../config/settings");
 const settings = getSettings();
@@ -29,7 +28,6 @@ const getUserWithPoRole = (message) => {
         id: member.id,
       };
     });
-
   /**
    * Check if there are more active
    * user with Protocol Officer role
@@ -131,7 +129,7 @@ const displayQueue = async (message) => {
    * for easy modification
    */
   const queueDetails = {
-    title: "**K40 Title Buff Queue",
+    title: "**K40 Title Buff Queue**",
     footer:
       "MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD!",
   };
@@ -174,7 +172,6 @@ const titleConstants = () => {
  */
 const getAvailableAccountName = (message) => {
   const accountDetail = message.guild.member(message.author);
-
   if (accountDetail.nickname) {
     return accountDetail.nickname;
   }
@@ -394,6 +391,101 @@ const getSheetCellVal = (sheet, cell) => {
   return sheet.getCellByA1(cell).value;
 };
 
+/**
+ * Compute and get request load
+ * @param bankDetail | object
+ * @param resourceCount | integer
+ * @returns string
+ */
+const computeRequestCount = (bankDetail, resourceCount) => {
+  const TAX_RATE = Number(bankDetail.TRANSPORT_TAX);
+  const TRANSPORT_AMOUNT = Number(bankDetail.TRANSPORT_AMOUNT);
+
+  // Check if bank detail is missing
+  if (!TAX_RATE || !TRANSPORT_AMOUNT) return false;
+
+  // Compute delivery amount
+  let deliverableAmount =
+    TRANSPORT_AMOUNT - (TRANSPORT_AMOUNT * TAX_RATE) / 100;
+  deliverableAmount = deliverableAmount.toString().slice(0, 3);
+  deliverableAmount = Number((deliverableAmount / 100).toFixed(2));
+
+  // Count how many times bank should hit transport
+  const loadCount = (resourceCount / deliverableAmount).toFixed(2);
+
+  // Separate full and last load count
+  const [wholeNumber, decimalNumber] = loadCount.split(".");
+  let decimalAmount = deliverableAmount * (decimalNumber / 100);
+  decimalAmount = decimalAmount.toFixed(2);
+  const decimalInMillions = decimalAmount * 1000000;
+  // Place holder to complete computed value
+  const MAGIC_AMOUNT = 10000;
+
+  for (
+    let lastLoad = decimalInMillions;
+    lastLoad <= TRANSPORT_AMOUNT;
+    lastLoad++
+  ) {
+    const findAmount = lastLoad - (lastLoad * TAX_RATE) / 100;
+    /**
+     * Find transport amount by
+     * incrementing value from decimal value and
+     * computing value with transport tax amount deducted
+     * then compare to given decimal value
+     */
+    if (Math.trunc(findAmount) == Math.trunc(decimalInMillions)) {
+      const isDivisbleToDeliverableAmount =
+        wholeNumber * deliverableAmount == resourceCount ? true : false;
+
+      if (isDivisbleToDeliverableAmount) {
+        return `Send **${wholeNumber}** full loads.`;
+      }
+
+      lastLoad = lastLoad + MAGIC_AMOUNT;
+      return `Send **${wholeNumber}** full loads and **${lastLoad}** for last load.`;
+    }
+  }
+};
+
+/**
+ * Prepare and get result of bank request
+ * @param message
+ * @param bankDetail
+ * @returns object
+ */
+const prepareRequest = (message, bankDetail, command) => {
+  let request = message.content.split(" ").filter((e) => e != `!${command}`);
+  let preparedRequest = [];
+  for (req of request) {
+    req = req.split("-");
+    const [resourceType, amount] = req;
+    const load = computeRequestCount(
+      {
+        TRANSPORT_TAX: bankDetail.TRANSPORT_TAX,
+        TRANSPORT_AMOUNT: bankDetail.TRANSPORT_AMOUNT,
+      },
+      amount
+    );
+
+    if (!load) {
+      message.channel.send("Set transport tax and amount first!");
+      break;
+    }
+
+    preparedRequest.push({
+      name: `__${
+        resourceType.charAt(0).toUpperCase() + resourceType.slice(1)
+      }__`,
+      value: `**Amount**: ${amount} million.
+      ---
+      ${load}`,
+      inline: true,
+    });
+  }
+
+  return preparedRequest;
+};
+
 module.exports = {
   readJson,
   writeJson,
@@ -401,6 +493,7 @@ module.exports = {
   displayQueue,
   queueingSystem,
   titleConstants,
+  prepareRequest,
   getSheetCellVal,
   hasPoAccessRole,
   getUserWithPoRole,

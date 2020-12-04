@@ -1,11 +1,11 @@
 const {
   addLogRecord,
   prepareLoggedData,
-  getUserWithPoRole,
   addOrRemoveRoleFromUser,
 } = require("../common/trackingSystem");
 const {
   hasPoAccessRole,
+  getUserWithPoRole,
   getAvailableAccountName,
   checkChannelIfBuffChannel,
   messageForUserThatHasNoPoAccess,
@@ -27,9 +27,9 @@ module.exports = {
       return false;
     }
 
-    const po = getUserWithPoRole(message)[0];
+    let po = getUserWithPoRole(message);
+    po = po[0];
     const author = getAvailableAccountName(message);
-    console.log(po);
 
     if (po) {
       const nickname = po.nickname;

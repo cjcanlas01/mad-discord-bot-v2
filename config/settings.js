@@ -21,13 +21,18 @@ const getSettings = () => {
      */
     BUFF_CHANNEL: "buff-requests",
     /**
-     * Market transport tax value for using request calculator command
+     * Storage for transport details for banks
      */
-    TRANSPORT_TAX: "7",
-    /**
-     * Market transport amount value for using request calculator command
-     */
-    MAX_TRANSPORT_AMOUNT: "6760000",
+    BANK: {
+      IRONBANK: {
+        TRANSPORT_TAX: "7",
+        TRANSPORT_AMOUNT: "6760000",
+      },
+      BBLUVSYOU: {
+        TRANSPORT_TAX: "7.2",
+        TRANSPORT_AMOUNT: "4160000",
+      },
+    },
     /**
      * Discord server role for ...
      */
@@ -67,7 +72,7 @@ const getSettings = () => {
     BUBBLE: {
       guild: "Dominator's Touch",
       channel: "bigmad-channel",
-      cellsCovered: "A1:C6",
+      cellsCovered: "A1:C3",
       TIME_STORE: [
         {
           name: "BBLUVSYOU",
@@ -77,20 +82,13 @@ const getSettings = () => {
           name: "IRONBANK",
           durationAndRenewedCell: ["B3", "C3"],
         },
-        {
-          name: "QCOLDWATER",
-          durationAndRenewedCell: ["B4", "C4"],
-        },
-        {
-          name: "CHETMANLEY",
-          durationAndRenewedCell: ["B5", "C5"],
-        },
-        {
-          name: "AKUMAJAYPEE",
-          durationAndRenewedCell: ["B6", "C6"],
-        },
       ],
     },
+    /**
+     * WIP: add this boolean conditions
+     * for setting commands by category
+     * for easy activation
+     */
     ACTIVATE: {
       BUBBLE_REMINDER: true,
       QUEUEING_SYSTEM: true,

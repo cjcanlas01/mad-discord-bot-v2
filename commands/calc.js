@@ -8,7 +8,7 @@ const config = require("../common/getConfig")();
 module.exports = {
   name: "calc",
   description: "Compute for bank requirement.",
-  syntax: `${config.PREFIX}calc <shipped> <delivered> <requested>`,
+  syntax: `${config.PREFIX}calc [shipped] [delivered] [requested]`,
   includes: true,
   execute(message, args) {
     const [shipped, delivered, requested] = args;

@@ -3,7 +3,6 @@ const { getSettings } = require("../config/settings");
 const settings = getSettings();
 const {
   getAvailableAccountName,
-  getUserWithPoRole,
   findServerRoleByName,
   initGoogleSpreadsheetConnection,
 } = require("../common/utilities");
@@ -150,5 +149,4 @@ module.exports = {
   addLogRecord,
   getPlayerName,
   addOrRemoveRoleFromUser,
-  getUserWithPoRole,
 };

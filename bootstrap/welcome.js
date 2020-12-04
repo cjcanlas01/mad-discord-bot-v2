@@ -5,7 +5,7 @@ const settings = getSettings();
 module.exports = bootstrapWelcome = (client) => {
   client.on("guildMemberAdd", (member) => {
     /**
-     * Welcome message container for servers, based on given identification tag (look in settings.json for server tags)
+     * Welcome message container for servers, based on given identification tag (look in config/settings.js for server tags)
      */
     const welcomeMsg = {
       MAD: function (name, rulesChannel = null) {

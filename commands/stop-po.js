@@ -2,18 +2,17 @@ const {
   addLogRecord,
   prepareLoggedData,
   addOrRemoveRoleFromUser,
-  getUserWithPoRole,
 } = require("../common/trackingSystem");
 const {
   hasPoAccessRole,
   writeJson,
   displayQueue,
+  getUserWithPoRole,
   getAvailableAccountName,
   checkChannelIfBuffChannel,
+  messageForUserThatHasNoPoAccess,
 } = require("../common/utilities");
-const { messageForUserThatHasNoPoAccess } = require("../common/messages");
 const config = require("../common/getConfig")();
-const settings = require("../settings.json");
 
 module.exports = {
   name: "stop-po",
