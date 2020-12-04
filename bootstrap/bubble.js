@@ -72,13 +72,11 @@ const checkTimeStoreForExpiration = async (o) => {
 const bootstrapBubble = async (client) => {
   console.log("Bubble bot is running...");
   const bubbleDetail = settings.BUBBLE;
-  // Find specified guild for bubble feature
-  const guild = client.guilds.cache.find((g) => g.name == bubbleDetail.guild);
   /**
    * Find specified text channel
    * based on specified guild
    */
-  const managementChannel = guild.channels.cache.find(
+  const managementChannel = client.channels.cache.find(
     (ch) => ch.name == bubbleDetail.channel
   );
 

@@ -70,7 +70,6 @@ const getSettings = () => {
       },
     },
     BUBBLE: {
-      guild: "Dominator's Touch",
       channel: "bigmad-channel",
       cellsCovered: "A1:C3",
       TIME_STORE: [
