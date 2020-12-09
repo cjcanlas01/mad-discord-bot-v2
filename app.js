@@ -138,13 +138,13 @@ client.on("guildMemberAdd", (member) => {
    * Welcome message container for servers, based on given identification tag (look in settings.json for server tags)
    */
   const welcomeMsg = {
-    ISY: function(name, rulesChannel) {
+    IPS: function (name, rulesChannel) {
       return `Welcome, ${name}! \n\nPlease head over to <#${rulesChannel.id}> to read them thoroughly. After you're done reading, change your Discord name to match your in-game name. Thanks! :hibiscus:`;
     },
-    K53: function(name, rulesChannel) {
+    K53: function (name, rulesChannel) {
       return `Welcome, ${name}! \n\nPlease head over to <#${rulesChannel.id}> to read them thoroughly. After you're done reading, change your Discord name to match your current alliance tag and in-game name. Thanks! :hibiscus:`;
-    }
-  }
+    },
+  };
 
   const channelDetail = settings.WELCOME_CHANNEL[member.guild.name];
   const welcomeChannel = member.guild.channels.cache.find(
@@ -154,7 +154,9 @@ client.on("guildMemberAdd", (member) => {
     (ch) => ch.name == channelDetail.rulesChannel
   );
 
-  welcomeChannel.send(welcomeMsg[channelDetail.tag](member.toString(), rulesChannel));
+  welcomeChannel.send(
+    welcomeMsg[channelDetail.tag](member.toString(), rulesChannel)
+  );
 });
 
 for (const file of commandFiles) {
