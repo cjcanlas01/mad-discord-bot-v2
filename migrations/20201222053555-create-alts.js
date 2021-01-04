@@ -9,7 +9,8 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       playerId: {
-        type: Sequelize.INTEGER,
+        unique: true,
+        type: Sequelize.STRING,
       },
       alts: {
         type: Sequelize.STRING,

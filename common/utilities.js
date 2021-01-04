@@ -486,10 +486,19 @@ const prepareRequest = (message, bankDetail, command) => {
   return preparedRequest;
 };
 
+/**
+ * Check if array is empty
+ * @param {array} arr
+ */
+const isArrayEmpty = (arr) => {
+  return arr.length == 0 ? true : false;
+};
+
 module.exports = {
   readJson,
   writeJson,
   getDateTime,
+  isArrayEmpty,
   displayQueue,
   queueingSystem,
   titleConstants,
