@@ -5,6 +5,21 @@ const client = new Discord.Client();
 const bootstrapWelcome = require("./bootstrap/welcome");
 const bootstrapCommand = require("./bootstrap/command");
 const { bootstrapBubble } = require("./bootstrap/bubble");
+const db = require("./common/db");
+
+/**
+ * Check if db connection works
+ */
+(async () => {
+  try {
+    await db.authenticate();
+    console.log("Connection has been established successfully.");
+    return true;
+  } catch (error) {
+    console.error("Unable to connect to the database:", error);
+    return false;
+  }
+})();
 
 /**
  * Initialize collections for

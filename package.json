@@ -12,9 +12,12 @@
   "dependencies": {
     "discord.js": "^12.2.0",
     "dotenv": "^8.2.0",
-    "google-spreadsheet": "^3.0.11"
+    "google-spreadsheet": "^3.0.11",
+    "mysql2": "^2.2.5",
+    "sequelize": "^6.3.5"
   },
   "devDependencies": {
-    "nodemon": "^2.0.4"
+    "nodemon": "^2.0.4",
+    "sequelize-cli": "^6.2.0"
   }
 }
