@@ -9,7 +9,7 @@ module.exports = bootstrapWelcome = (client) => {
      */
     const welcomeMsg = {
       MAD: function (name, rulesChannel = null) {
-        return `Hey ${name.toString()}, welcome to MAD Discord :tada::hugging: ! Please change your name to the character in game with your Alliance tag in front. Example : [ABC] JohnDoe \n\nIf you're here to apply to MAD, please copy and paste the following message: \n\`Hello @MAD Officer I'd like to apply to MAD please\``;
+        return `Hey ${name.toString()}, welcome to MAD Discord :tada::hugging: ! Please change your name to the character in game with your Alliance tag in front. Example : [ABC] JohnDoe \n\nIf you're here to apply to MAD, please copy and paste the following message: \n\`!iam Applicant\``;
       },
       K31: function (name, rulesChannel = null) {
         return `Hey ${name.toString()}, welcome to K31 Discord :tada::hugging: ! Please change your name to the character in game with your Alliance tag in front. Example : [ABC] JohnDoe`;
