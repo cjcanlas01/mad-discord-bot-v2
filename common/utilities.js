@@ -176,7 +176,7 @@ const getAvailableAccountName = (message) => {
     return accountDetail.nickname;
   }
 
-  return accountDetail.user.name;
+  return accountDetail.user.username;
 };
 
 /**

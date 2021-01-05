@@ -74,11 +74,11 @@ const getSettings = () => {
       cellsCovered: "A1:C3",
       TIME_STORE: [
         {
-          name: "BBLUVSYOU",
+          name: "BB",
           durationAndRenewedCell: ["B2", "C2"],
         },
         {
-          name: "IRONBANK",
+          name: "Iron",
           durationAndRenewedCell: ["B3", "C3"],
         },
       ],
