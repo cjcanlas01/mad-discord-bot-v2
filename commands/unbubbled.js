@@ -34,7 +34,7 @@ module.exports = {
       // Transform every array element to lower case
       player.alts = player.alts.split(",").map((a) => a.toLowerCase());
       // Check if unbubbled alt exists on any player records
-      if (player.alts.find((a) => a == content.toLowerCase())) {
+      if (player.alts.find((a) => a.trim() == content.toLowerCase())) {
         const getPlayer = message.guild.members.cache.find(
           (m) => m.id == player.playerId
         );
