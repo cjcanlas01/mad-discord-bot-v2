@@ -30,7 +30,7 @@ const getSettings = () => {
       },
       BBLUVSYOU: {
         TRANSPORT_TAX: "7.2",
-        TRANSPORT_AMOUNT: "4160000",
+        TRANSPORT_AMOUNT: "4260000",
       },
     },
     /**
