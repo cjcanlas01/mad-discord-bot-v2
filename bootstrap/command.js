@@ -14,9 +14,15 @@ const findRoleById = (message, id) => {
 
 /**
  * Parse id number from role string
+ * check if regex returns a value
  */
 const parseIdFromRoleTag = (role) => {
-  return role.match(/\d+/g).join("");
+  const regex = role.match(/\d+/g);
+  if (regex) {
+    return regex.join("");
+  }
+
+  return false;
 };
 
 module.exports = bootstrapCommands = (client, message) => {
@@ -55,8 +61,9 @@ module.exports = bootstrapCommands = (client, message) => {
     // Check first if command starts with Protocol Officer role tag
     if (protocolOfficerRole && protocolOfficerRole.name != settings.PO_ROLE)
       return;
-    // Now check for role command as second argument
-    if (!commandRole) return;
+    // Now check for role command as second argument and if value parsed is correct
+    if (!commandRole || !parseIdFromRoleTag(commandRole)) return;
+
     let commandTag = findRoleById(message, parseIdFromRoleTag(commandRole));
     commandTag = commandTag.name.toLowerCase();
     // Initialize collection of role commands
