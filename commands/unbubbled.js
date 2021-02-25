@@ -30,19 +30,30 @@ module.exports = {
      * get player discord object then
      * send message to discord
      */
+    const proctectors = [];
     for (player of players) {
       // Transform every array element to lower case
       player.alts = player.alts.split(",").map((a) => a.toLowerCase());
-      // Check if unbubbled alt exists on any player records
+      /**
+       * Check if unbubbled alt exists on any player records
+       * then push into array if there are many
+       */
       if (player.alts.find((a) => a.trim() == content.toLowerCase())) {
-        const getPlayer = message.guild.members.cache.find(
+        const protector = message.guild.members.cache.find(
           (m) => m.id == player.playerId
         );
-        message.channel.send(
-          `Hey ${getPlayer.toString()}, ${content} is unbubbled!`
-        );
-        return;
+        proctectors.push(protector);
       }
+    }
+
+    if (proctectors.length >= 1) {
+      // Convert list of player ids to discord tag strings
+      const tagStrings = proctectors.map((p) => p.toString());
+      message.channel.send(
+        `Hey ${tagStrings.join(" ")}, ${content} is unbubbled!`
+      );
+    } else {
+      message.channel.send(`Protectors not found!`);
     }
   },
 };
