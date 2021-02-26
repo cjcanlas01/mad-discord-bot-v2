@@ -7,12 +7,22 @@ module.exports = {
   description: "Saves or updates your watch record.",
   syntax: `${config.PREFIX}watch [name separated by comma]`,
   async execute(message, args) {
-    if (isArrayEmpty(args)) {
-      message.channel.send(
-        "Seems I can't find your watch record, did you put it in?"
-      );
-      return;
+    /**
+     * If args list is empty, return alts list
+     */
+    const data = await m.Alts.findAll({
+      attributes: ['alts'],
+        where: {
+          playerId: message.author.id,
+        }
+    });
+
+    const alts = (!isArrayEmpty(data)) ? data[0].dataValues.alts : false;
+
+    if (!!alts && isArrayEmpty(args)) {
+      return message.channel.send(`${message.author.toString()}, your current alt record is: ${alts}`);
     }
+
     /**
      * If record is not found, create record
      * else update record
@@ -26,6 +36,10 @@ module.exports = {
         returning: true,
       }
     );
+
+    if (!alts && !isCreated && isArrayEmpty(args)) {
+      return message.channel.send("Seems I can't find your alts, did you put it in?");
+    }
 
     if (isCreated) {
       message.channel.send(
