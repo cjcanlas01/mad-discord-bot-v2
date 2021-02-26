@@ -1,10 +1,4 @@
-const {
-  queueingSystem,
-  titleConstants,
-  findServerRoleByName,
-} = require("../common/utilities");
-const { getSettings } = require("../config/settings");
-const settings = getSettings();
+const { queueingSystem, titleConstants } = require("../common/utilities");
 
 module.exports = {
   name: "atk",
@@ -15,12 +9,6 @@ module.exports = {
   po: true,
   isRoleCommand: true,
   execute(message) {
-    // Check if user has proper role
-    if (!findServerRoleByName(message, settings.RALLY_LEADER_ROLE)) {
-      message.react("❌");
-      return false;
-    }
-
     queueingSystem(message, titleConstants().LORD_COMMANDER);
   },
 };
