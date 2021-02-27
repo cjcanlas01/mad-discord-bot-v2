@@ -1,54 +1,53 @@
-const { isArrayEmpty } = require("../common/utilities");
+const { isArrayEmpty, post } = require("../common/utilities");
 const config = require("../common/getConfig")();
 const m = require("../models/index");
+
+const getWatchList = async (message) => {
+  return m.Alts.findAll({
+    attributes: ['alts'],
+    where: {
+      playerId: message.author.id,
+    }
+  });
+}
+
+const printWatchList = async (message) => {
+  const watchData = await getWatchList(message);
+  const list = (!isArrayEmpty(watchData)) ? watchData[0].dataValues.alts : null;
+  return (list)
+    ? `${message.author.toString()}, your current watch list is: ${list}`
+    : `Seems I can't find your watch list, have you added any characters yet?`;
+}
+
+const updateOrInsert = async (message, args) => {
+  const [, isCreated] = await m.Alts.upsert(
+    {
+      playerId: message.author.id,
+      alts: args.join(" "),
+    },
+    {
+      returning: true,
+    }
+  );
+  const createdText = (isCreated) ? 'added' : 'updated';
+  return `${message.author.toString()}, your watch record has been ${createdText}.`;
+}
 
 module.exports = {
   name: "watch",
   description: "Saves or updates your watch record.",
   syntax: `${config.PREFIX}watch [name separated by comma]`,
+  getWatchList,
+  printWatchList,
+  updateOrInsert,
   async execute(message, args) {
     /**
-     * If args list is empty, return alts list
+     * If args list is empty, return watch list or a message that
+     * they don't have anyone on their watch list yet.
+     *
+     * If arg list is not empty and record is not found, create record, else update record.
      */
-    const data = await m.Alts.findAll({
-      attributes: ['alts'],
-        where: {
-          playerId: message.author.id,
-        }
-    });
-
-    const alts = (!isArrayEmpty(data)) ? data[0].dataValues.alts : false;
-
-    if (!!alts && isArrayEmpty(args)) {
-      return message.channel.send(`${message.author.toString()}, your current alt record is: ${alts}`);
-    }
-
-    /**
-     * If record is not found, create record
-     * else update record
-     */
-    const [, isCreated] = await m.Alts.upsert(
-      {
-        playerId: message.author.id,
-        alts: args.join(" "),
-      },
-      {
-        returning: true,
-      }
-    );
-
-    if (!alts && !isCreated && isArrayEmpty(args)) {
-      return message.channel.send("Seems I can't find your alts, did you put it in?");
-    }
-
-    if (isCreated) {
-      message.channel.send(
-        `${message.author.toString()}, your watch record has been added.`
-      );
-    } else {
-      message.channel.send(
-        `${message.author.toString()}, your watch record has been updated.`
-      );
-    }
+    const sendMessage = (isArrayEmpty(args)) ? await printWatchList(message) : await updateOrInsert(message, args);
+    return post(message, sendMessage);
   },
 };

@@ -12,7 +12,8 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
     }
-  };
+  }
+
   Alts.init({
     playerId: DataTypes.INTEGER,
     alts: DataTypes.STRING

@@ -490,9 +490,14 @@ const prepareRequest = (message, bankDetail, command) => {
  * Check if array is empty
  * @param {array} arr
  */
-const isArrayEmpty = (arr) => {
-  return arr.length == 0 ? true : false;
-};
+const isArrayEmpty = (arr) => Array.isArray(arr) && arr.length === 0;
+
+/**
+ * Post a message into a discord channel
+ * @param message {Object} message object for Discord info
+ * @param str {String} text you wish to send to a channel
+ */
+const post = (message, str) => message.channel.send(str);
 
 module.exports = {
   readJson,
@@ -514,4 +519,5 @@ module.exports = {
   getAccountNameFromCommandRequest,
   initGoogleSpreadsheetConnection,
   messageForUserThatHasNoPoAccess,
+  post,
 };
