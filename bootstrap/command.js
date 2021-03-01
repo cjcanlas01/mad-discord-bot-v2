@@ -65,6 +65,10 @@ module.exports = bootstrapCommands = (client, message) => {
     if (!commandRole || !parseIdFromRoleTag(commandRole)) return;
 
     let commandTag = findRoleById(message, parseIdFromRoleTag(commandRole));
+
+    // Checks if command tag based on roles is returned
+    if (!commandTag) return;
+
     commandTag = commandTag.name.toLowerCase();
     // Initialize collection of role commands
     const roleCollection = client.roleCommands;
