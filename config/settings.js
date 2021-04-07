@@ -56,9 +56,9 @@ const getSettings = () => {
      * - discord server rules channel (optional)
      */
     WELCOME_CHANNEL: {
-      "K31 Discord": {
-        tag: "K31",
-        name: "K31 Discord",
+      "K65 Discord": {
+        tag: "K65",
+        name: "K65 Discord",
         welcomeChannel: "welcome",
         rulesChannel: "",
       },
