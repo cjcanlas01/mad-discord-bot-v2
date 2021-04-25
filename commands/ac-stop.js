@@ -1,6 +1,6 @@
 const {
-  readJson,
-  writeJson,
+  getBuffMode,
+  setBuffMode,
   hasPoAccessRole,
   checkChannelIfBuffChannel,
   messageForUserThatHasNoPoAccess,
@@ -22,19 +22,17 @@ module.exports = {
       return false;
     }
 
-    const r = await readJson("/data/buff-mode.json");
-    if (r.success) {
-      if (r.result["buff-mode"]) {
-        // Update buff mode to false
-        r.result["buff-mode"] = false;
+    let buffMode = await getBuffMode();
+    buffMode = JSON.parse(buffMode);
 
-        const isFileUpdated = await writeJson("/data/buff-mode.json", r.result);
-        if (isFileUpdated) {
-          message.channel.send(
-            `Alliance Conquest Buff Mode is OFF! Regular titles are enabled! Get them!`
-          );
-        }
-      }
+    if (!buffMode)
+      return message.channel.send("Alliance Conquest Buff Mode is INACTIVE!");
+
+    const isUpdated = await setBuffMode("false");
+    if (isUpdated.length > 0) {
+      message.channel.send(
+        `Alliance Conquest Buff Mode is OFF! Regular titles are enabled! Get them!`
+      );
     }
   },
 };

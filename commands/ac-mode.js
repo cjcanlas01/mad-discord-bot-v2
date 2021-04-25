@@ -1,9 +1,9 @@
 const {
-  readJson,
-  writeJson,
   hasPoAccessRole,
   checkChannelIfBuffChannel,
   messageForUserThatHasNoPoAccess,
+  getBuffMode,
+  setBuffMode,
 } = require("../common/utilities");
 const config = require("../common/getConfig")();
 
@@ -22,18 +22,17 @@ module.exports = {
       return false;
     }
 
-    const r = await readJson("/data/buff-mode.json");
-    if (r.success) {
-      if (!r.result["buff-mode"]) {
-        r.result["buff-mode"] = true;
+    let buffMode = await getBuffMode();
+    buffMode = JSON.parse(buffMode);
 
-        const isFileUpdated = await writeJson("/data/buff-mode.json", r.result);
-        if (isFileUpdated) {
-          message.channel.send(
-            `Alliance Conquest Buff Mode is ON! Regular titles are disabled! Get them LC buff!`
-          );
-        }
-      }
+    if (buffMode)
+      return message.channel.send("Alliance Conquest Buff Mode is ACTIVE!");
+
+    const isUpdated = await setBuffMode("true");
+    if (isUpdated.length > 0) {
+      message.channel.send(
+        `Alliance Conquest Buff Mode is ON! Regular titles are disabled! Get them LC buff!`
+      );
     }
   },
 };

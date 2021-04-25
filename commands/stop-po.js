@@ -5,12 +5,12 @@ const {
 } = require("../common/trackingSystem");
 const {
   hasPoAccessRole,
-  writeJson,
   displayQueue,
   getUserWithPoRole,
   getAvailableAccountName,
   checkChannelIfBuffChannel,
   messageForUserThatHasNoPoAccess,
+  setBuffMode,
 } = require("../common/utilities");
 const config = require("../common/getConfig")();
 
@@ -77,9 +77,9 @@ module.exports = {
           },
         ];
 
-        const isFileUpdated = await writeJson("/data/queue.json", queue);
-        if (isFileUpdated) {
-          displayQueue(message);
+        const isUpdated = await setBuffMode(false);
+        if (isUpdated) {
+          displayQueue(message, queue);
         }
       }
     } else {

@@ -1,10 +1,9 @@
 const config = require("../common/getConfig")();
-const { getSettings } = require("../config/settings");
-const settings = getSettings();
 const {
   getAvailableAccountName,
   findServerRoleByName,
   initGoogleSpreadsheetConnection,
+  getConfig,
 } = require("../common/utilities");
 
 /**
@@ -135,7 +134,7 @@ const addLogRecord = async (record) => {
  */
 const addOrRemoveRoleFromUser = (id, condition, message) => {
   message.guild.members.fetch(id).then((info) => {
-    const role = findServerRoleByName(message, settings.PO_ROLE);
+    const role = findServerRoleByName(message, getConfig(message, "PO_ROLE"));
     if (condition) {
       info.roles.add(role);
     } else {

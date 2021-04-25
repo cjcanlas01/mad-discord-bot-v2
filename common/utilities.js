@@ -2,8 +2,42 @@ const fs = require("fs");
 const path = require("path");
 const embed = require("../common/discordEmbed");
 const { GoogleSpreadsheet } = require("google-spreadsheet");
-const { getSettings } = require("../config/settings");
-const settings = getSettings();
+const m = require("../models/index");
+
+const getBuffMode = async () => {
+  const getBuffMode = await m.Config.findAll({
+    attributes: ["config", "value"],
+    where: {
+      config: "BUFF_MODE",
+    },
+  });
+
+  return getBuffMode[0].dataValues.value;
+};
+
+const setBuffMode = async (value) => {
+  const updateBuffMode = await m.Config.update(
+    { value: value },
+    {
+      where: {
+        config: "BUFF_MODE",
+      },
+    }
+  );
+  return updateBuffMode;
+};
+
+const getConfig = (message, config) => {
+  return message.client.configs.get(config);
+};
+
+const getBank = (message, bank) => {
+  return message.client.banks.get(bank);
+};
+
+const getWelcomeMsgs = (message, guild) => {
+  return message.client.welcomeMsgs.get(guild);
+};
 
 /**
  * Identify if there is current user with Protocol officer role
@@ -19,7 +53,7 @@ const getUserWithPoRole = (message) => {
   const poList = message.guild.members.cache
     .filter((member) => {
       return member.roles.cache.find((data) => {
-        return data.name == settings.PO_ROLE;
+        return data.name == getConfig(message, "PO_ROLE");
       });
     })
     .map((member) => {
@@ -65,65 +99,10 @@ const findServerRoleByName = (message, roleName) => {
 };
 
 /**
- * Read specified file on specified directory
- * @param dir | folder name + filename
- * @returns promise
- */
-const readJson = (dir) => {
-  return new Promise((resolve, reject) => {
-    fs.readFile(path.join(process.cwd(), dir), "utf8", (err, data) => {
-      if (err) {
-        reject({
-          success: false,
-          err: err,
-        });
-      } else {
-        const json = JSON.parse(data);
-        if (json) {
-          resolve({
-            success: true,
-            result: json,
-          });
-        }
-      }
-    });
-  });
-};
-
-/**
- * Update/ write specified file on specified directory
- * @param dir | folder name + filename
- * @param data | json
- * @returns promise
- */
-const writeJson = (dir, data) => {
-  return new Promise((resolve, reject) => {
-    fs.writeFile(
-      path.join(process.cwd(), dir),
-      JSON.stringify(data),
-      "utf8",
-      (err, data) => {
-        if (err) {
-          reject({
-            success: false,
-            err: err,
-          });
-        } else {
-          resolve({
-            success: true,
-            result: "File updated successfully.",
-          });
-        }
-      }
-    );
-  });
-};
-
-/**
  * Display title queue on specified channel
  * @param message | discord message
  */
-const displayQueue = async (message) => {
+const displayQueue = async (message, fields) => {
   /**
    * Object for queue details
    * for easy modification
@@ -133,19 +112,16 @@ const displayQueue = async (message) => {
     footer:
       "MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD! MAD!",
   };
-  const channel = findChannelByName(message, settings.QUEUE_CHANNEL);
+  const channel = findChannelByName(
+    message,
+    getConfig(message, "QUEUE_CHANNEL")
+  );
   /**
    * Delete channel messages
    * up to 100
    */
   await channel.bulkDelete(100);
-  const r = await readJson("/data/queue.json");
-
-  if (r.success) {
-    channel.send(embed(r.result, queueDetails.title, queueDetails.footer));
-  } else {
-    channel.send("Oops. Something went wrong...");
-  }
+  channel.send(embed(fields, queueDetails.title, queueDetails.footer));
 };
 
 /**
@@ -214,109 +190,112 @@ const getAccountNameFromCommandRequest = (message) => {
  * if currently included
  * on any queue
  *
- * @param queue | json
- * @param user | string
+ * @param queue | object
+ * @param requestingUser | string
+ * @param searchAll | boolean
  * @returns boolean
  */
-const checkIfUserIsInQueue = (queue, requestingUser) => {
-  const q = queue.value;
-  if (Array.isArray(q) && q.includes(requestingUser)) {
-    return true;
+const checkIfUserIsInQueue = (queue, requestingUser, searchAll = false) => {
+  // Find user on title queue
+  const findInQueue = (q, user) => {
+    if (Array.isArray(q.value) && q.value.includes(user)) return true;
+    return false;
+  };
+
+  if (searchAll) {
+    for (const q of queue) {
+      if (findInQueue(q, requestingUser)) return true;
+    }
+    return false;
   }
 
-  return false;
+  return findInQueue(queue, requestingUser);
+};
+
+/**
+ * Get queue fields from
+ * discord message object
+ *
+ * @param {Object} channel
+ * @returns Object
+ */
+const getQueueFields = async (channel) => {
+  const queueMsg = await channel.messages.fetch();
+  const fields = queueMsg.first().embeds[0].fields;
+  const parsedFields = fields.map((title) => {
+    title.value = title.value.split("\n");
+    return title;
+  });
+  return parsedFields;
 };
 
 const queueingSystem = async (message, titleBuff) => {
-  const r = await readJson("/data/buff-mode.json");
+  let buffMode = await getBuffMode();
+  const mode = JSON.parse(buffMode);
+  const title = titleConstants();
+  if (
+    // Determine if buff mode is inactive and title request is Lord Commander
+    (!mode && titleBuff == title.LORD_COMMANDER) ||
+    // Determine if buff mode is active and title other than Lord Commander is requested
+    (mode && titleBuff != title.LORD_COMMANDER) ||
+    // Check if there is a Protocol Officer active
+    !getUserWithPoRole(message)
+  ) {
+    message.react("❌");
+    return false;
+  }
 
-  if (r.success) {
-    const d = r.result;
-    const mode = d["buff-mode"];
-    const title = titleConstants();
+  const requestingUser = getAccountNameFromCommandRequest(message);
+  const channel = findChannelByName(
+    message,
+    getConfig(message, "QUEUE_CHANNEL")
+  );
+  let fields = await getQueueFields(channel);
+  if (checkIfUserIsInQueue(fields, requestingUser, true)) {
+    return post(
+      message,
+      "You are already in a queue! Please finish the current one first. Thank you."
+    );
+  }
 
-    if (
-      // Determine if buff mode is inactive and title request is Lord Commander
-      (!mode && titleBuff == title.LORD_COMMANDER) ||
-      // Determine if buff mode is active and title other than Lord Commander is requested
-      (mode && titleBuff != title.LORD_COMMANDER) ||
-      // Check if there is a Protocol Officer active
-      !getUserWithPoRole(message)
-    ) {
-      message.react("❌");
-      return false;
+  for (let title of fields) {
+    if (title.name != titleBuff) continue;
+
+    const empty = "[EMPTY]";
+    if (title.value.includes(empty)) {
+      title.value = title.value.filter((v) => v != empty);
     }
 
-    const requestingUser = getAccountNameFromCommandRequest(message);
-    const queue = await readJson("/data/queue.json");
-
-    if (queue.success) {
-      // Modify queue for new command requested
-      let result = queue.result;
-      for (let title of result) {
-        if (title.name == titleBuff) {
-          if (checkIfUserIsInQueue(title, requestingUser)) {
-            message.channel.send(
-              "You are already in a queue! Please finish the current one first. Thank you."
-            );
-            break;
-          } else {
-            if (!Array.isArray(title.value)) {
-              title.value = [];
-            }
-
-            // Add current requesting user to the queue
-            title.value.push(requestingUser);
-
-            const isQueueUpdated = await writeJson("data/queue.json", result);
-            if (isQueueUpdated) {
-              message.react("☑️");
-              message.channel.send(
-                `${message.author}, ${requestingUser} added to the ${titleBuff} queue.`
-              );
-              displayQueue(message);
-            }
-            break;
-          }
-        }
-      }
-    }
+    title.value.push(requestingUser);
+    displayQueue(message, fields);
+    message.react("☑️");
+    return post(
+      message,
+      `${message.author}, ${requestingUser} added to the ${titleBuff} queue.`
+    );
   }
 };
 
 const removeNameInQueue = async (message, requestingUser) => {
-  const r = await readJson("/data/queue.json");
+  const channel = findChannelByName(
+    message,
+    getConfig(message, "QUEUE_CHANNEL")
+  );
+  let fields = await getQueueFields(channel);
+  for (let title of fields) {
+    if (!checkIfUserIsInQueue(title, requestingUser)) continue;
 
-  if (r.success) {
-    /**
-     * Get title queue of
-     * where requesting user exists
-     */
-    let result = r.result;
-    let titleWhereRequestingUserExists;
-    for (let titles of result) {
-      if (checkIfUserIsInQueue(titles, requestingUser)) {
-        // Filter out requesting user from the title
-        titles.value = titles.value.filter((e) => {
-          return e != requestingUser;
-        });
-
-        // Replace empty queue array with empty indicator
-        if (titles.value.length <= 0) {
-          titles.value = "[EMPTY]";
-        }
-
-        const isUpdated = await writeJson("/data/queue.json", result);
-        if (isUpdated.success) {
-          message.react("✅");
-          displayQueue(message);
-        } else {
-          message.channel.send("You are not in any queue.");
-        }
-        break;
-      }
+    title.value = title.value.filter((e) => e != requestingUser);
+    if (title.value.length <= 0) {
+      title.value = "[EMPTY]";
     }
+
+    displayQueue(message, fields);
+    message.react("☑️");
+    return;
   }
+
+  return post(message, "You are not in any queue.");
 };
 
 /**
@@ -326,7 +305,7 @@ const removeNameInQueue = async (message, requestingUser) => {
 const hasPoAccessRole = (message) => {
   if (
     message.member.roles.cache.find(
-      (role) => role.name === settings.PO_ACCESS_ROLE
+      (role) => role.name === getConfig(message, "PO_ACCESS_ROLE")
     )
   ) {
     return true;
@@ -350,7 +329,7 @@ const getDateTime = (d) => {
  * Check if channel is buff channel
  */
 const checkChannelIfBuffChannel = (message) => {
-  if (message.channel.name != settings.BUFF_CHANNEL) {
+  if (message.channel.name != getConfig(message, "BUFF_CHANNEL")) {
     return false;
   }
 
@@ -361,7 +340,8 @@ const checkChannelIfBuffChannel = (message) => {
  * Send messages if user has no PO role
  */
 const messageForUserThatHasNoPoAccess = (message) => {
-  message.channel.send(
+  post(
+    message,
     `${message.author.toString()}, you do not have access for Protocol Officer!`
   );
 };
@@ -468,7 +448,7 @@ const prepareRequest = (message, bankDetail, command) => {
     );
 
     if (!load) {
-      message.channel.send("Set transport tax and amount first!");
+      post(message, "Set transport tax and amount first!");
       break;
     }
 
@@ -500,8 +480,6 @@ const isArrayEmpty = (arr) => Array.isArray(arr) && arr.length === 0;
 const post = (message, str) => message.channel.send(str);
 
 module.exports = {
-  readJson,
-  writeJson,
   getDateTime,
   isArrayEmpty,
   displayQueue,
@@ -520,4 +498,9 @@ module.exports = {
   initGoogleSpreadsheetConnection,
   messageForUserThatHasNoPoAccess,
   post,
+  getConfig,
+  getBank,
+  getWelcomeMsgs,
+  getBuffMode,
+  setBuffMode,
 };

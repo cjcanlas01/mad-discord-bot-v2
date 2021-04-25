@@ -1,7 +1,5 @@
 const config = require("../common/getConfig")();
-const { getSettings } = require("../config/settings");
-const settings = getSettings();
-const { checkChannelIfBuffChannel } = require("../common/utilities");
+const { checkChannelIfBuffChannel, getConfig } = require("../common/utilities");
 
 /**
  * Find role by id
@@ -59,7 +57,10 @@ module.exports = bootstrapCommands = (client, message) => {
     );
 
     // Check first if command starts with Protocol Officer role tag
-    if (protocolOfficerRole && protocolOfficerRole.name != settings.PO_ROLE)
+    if (
+      protocolOfficerRole &&
+      protocolOfficerRole.name != getConfig(message, "PO_ROLE")
+    )
       return;
     // Now check for role command as second argument and if value parsed is correct
     if (!commandRole || !parseIdFromRoleTag(commandRole)) return;

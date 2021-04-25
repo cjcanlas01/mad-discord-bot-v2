@@ -1,5 +1,4 @@
 const {
-  writeJson,
   displayQueue,
   hasPoAccessRole,
   messageForUserThatHasNoPoAccess,
@@ -46,11 +45,7 @@ module.exports = {
       },
     ];
 
-    const isFileUpdated = await writeJson("/data/queue.json", queue);
-
-    if (isFileUpdated.success) {
-      message.channel.send("Title queue is empty now.");
-      displayQueue(message);
-    }
+    message.channel.send("Title queue is empty now.");
+    displayQueue(message, queue);
   },
 };
