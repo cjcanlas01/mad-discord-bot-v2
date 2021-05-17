@@ -6,7 +6,11 @@ module.exports = {
   syntax: `${config.PREFIX}d-rallies`,
   banners: true,
   execute(message) {
-    message.channel.send("@here", {
+    const role = findServerRoleByName(
+      message,
+      getConfig(message, "DRAGON_RALLIES")
+    );
+    message.channel.send(role.toString(), {
       files: ["./images/rally-dragon.jpg"],
     });
   },
