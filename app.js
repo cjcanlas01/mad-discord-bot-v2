@@ -43,7 +43,7 @@ for (const file of commandFiles) {
 
 client.once("ready", async () => {
   console.log("Ready!");
-  client.user.setActivity(`${config.PREFIX}madhelp`, { type: "LISTENING" });
+  client.user.setActivity(`${config.PREFIX}hohhelp`, { type: "LISTENING" });
 });
 
 client.on("message", (message) => {

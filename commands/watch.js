@@ -37,6 +37,7 @@ module.exports = {
   name: "watch",
   description: "Saves or updates your watch record.",
   syntax: `${config.PREFIX}watch [name separated by comma]`,
+  includes: true,
   getWatchList,
   printWatchList,
   updateOrInsert,
