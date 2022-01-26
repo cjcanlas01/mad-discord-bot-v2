@@ -1,3 +1,5 @@
 {
-  "production": {}
+  "production": {
+    "use_env_variable": "mysql://bb372757c2cfee:d8045283@us-cdbr-east-05.cleardb.net/heroku_2d30939f403cf77?reconnect=true"
+  }
 }
