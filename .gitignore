@@ -1,4 +1,4 @@
-config.json
+local.config.json
 node_modules
 .env
 *.iml
