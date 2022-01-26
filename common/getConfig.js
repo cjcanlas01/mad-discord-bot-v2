@@ -8,5 +8,6 @@ module.exports = function getConfig() {
     GOOGLE_SERVICE_ACCOUNT_EMAIL: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
     GOOGLE_PRIVATE_KEY: process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, "\n"),
     TIME_STORE_SPREADSHEET_ID: process.env.TIME_STORE_SPREADSHEET_ID,
+    CLEARDB_DATABASE_URL: process.env.CLEARDB_DATABASE_URL,
   };
 };
